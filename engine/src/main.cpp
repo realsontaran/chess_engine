@@ -1,9 +1,14 @@
 #include "bitboard.h"
+#include "attack_table.h"
 #include <iostream>
 
 int main(int argc, char *argv[]) {
-    u64 board = 0ULL;
+    U64 board = 0ULL;
+    square sq = a1;
+    side sd = white;
+    set_bit(board, sq);
+    board |= pawn_attack_masking(sd, sq);
+
     printBoard(board);
-    printBoard(set_bit(board, e4));
     return 0;
 }
