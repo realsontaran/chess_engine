@@ -25,7 +25,32 @@ U64 soutOne(U64 b) {
 U64 nortOne(U64 b) {
     return b >> 8;
 }
+U64 noNoEa(U64 b) {
+    return (b & notHFile) >> 15;
+}
+U64 noNoWe(U64 b) {
+    return (b & notAFile) >> 17;
+}
+U64 soSoEa(U64 b) {
+    return (b & notHFile) << 17;
+}
+U64 soSoWe(U64 b) {
+    return (b & notAFile) << 15;
+}
 
+/* Knight Movements */
+U64 noEaEa(U64 b) {
+    return (b & notHorGFile) >> 6;
+}
+U64 soEaEa(U64 b) {
+    return (b & notHorGFile) << 10;
+}
+U64 noWeWe(U64 b) {
+    return (b & notAorBFile) >> 10;
+}
+U64 soWeWe(U64 b) {
+    return (b & notAorBFile) << 6;
+}
 void printBoard(U64 board) {
     for (int rank = 0; rank < 8; ++rank) {
         for (int file = 0; file < 8; ++file) {
@@ -33,9 +58,9 @@ void printBoard(U64 board) {
             if (file == 0) {
                 printf("  %d ", 8 - rank);
             }
-            printf(" %d", get_bit(board, square) ? 1 : 0);
+            printf("%s", get_bit(board, square) ? "[*]" : "[ ]");
         }
         printf("\n");
     }
-    printf("     a b c d e f g h\n\n");
+    printf("     a  b  c  d  e  f  g  h\n\n");
 }

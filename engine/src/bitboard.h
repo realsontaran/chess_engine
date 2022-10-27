@@ -49,6 +49,27 @@ U64 noEaOne(U64 b);
 U64 soEaOne(U64 b);
 U64 soWeOne(U64 b);
 U64 noWeOne(U64 b);
+/*
+         noNoWe    noNoEa
+          |     |
+noWeWe  __|     |__  noEaEa
+           \   /
+            >0<
+        __ /   \ __
+soWeWe    |     |    soEaEa
+          |     |
+        soSoWe    soSoEa
+
+    Knight move compass
+ */
+U64 noNoEa(U64 b);
+U64 noNoWe(U64 b);
+U64 soSoEa(U64 b);
+U64 soSoWe(U64 b);
+U64 noEaEa(U64 b);
+U64 noWeWe(U64 b);
+U64 soEaEa(U64 b);
+U64 soWeWe(U64 b);
 
 void printBoard(U64 board);
 

@@ -4,10 +4,10 @@
 
 int main(int argc, char *argv[]) {
     U64 board = 0ULL;
-    square sq = a1;
+    square sq = h8;
     side sd = white;
     set_bit(board, sq);
-    board |= pawn_attack_masking(sd, sq);
+    board |= knight_attack_masking(sq);
 
     printBoard(board);
     return 0;

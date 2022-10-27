@@ -17,6 +17,24 @@ U64 pawn_attack_masking(side sd, square sq) {
     return attacks;
 }
 
+U64 knight_attack_masking(square sq) {
+    U64 attacks = 0ULL;
+    U64 bitboard = 0ULL;
+
+    set_bit(bitboard, sq);
+
+    attacks |= noNoEa(bitboard);
+    attacks |= noNoWe(bitboard);
+    attacks |= soSoEa(bitboard);
+    attacks |= soSoWe(bitboard);
+    attacks |= noEaEa(bitboard);
+    attacks |= noWeWe(bitboard);
+    attacks |= soEaEa(bitboard);
+    attacks |= soWeWe(bitboard);
+
+    return attacks;
+}
+
 void init_leapers_attacks() {
     for (int sq = 0; sq < 64; ++sq) {
         arrPawnAttacks[white][sq] = pawn_attack_masking(white, (square)sq);
