@@ -10,6 +10,7 @@ U64 bishop_attack_masking(square sq);
 U64 rook_attack_masking(square sq);
 
 U64 generate_bishop_attacks(square sq, U64 blocks);
+U64 generate_rook_attacks(square sq, U64 blocks);
 
 void init_leapers_attacks();
 

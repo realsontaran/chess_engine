@@ -4,10 +4,14 @@
 
 int main(int argc, char *argv[]) {
     U64 board = 0ULL;
-    square sq = e4;
+    square sq = c2;
     side sd = white;
     set_bit(board, sq);
-    board |= rook_attack_masking(sq);
+    U64 blocks = 0ULL;
+    set_bit(blocks, f2);
+    set_bit(blocks, c6);
+    set_bit(blocks, b2);
+    board |= generate_rook_attacks(sq, blocks);
 
     printBoard(board);
 
