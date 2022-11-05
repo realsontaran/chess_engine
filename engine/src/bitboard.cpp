@@ -10,6 +10,13 @@ static inline int bit_count(U64 board) {
     return count;
 }
 
+static inline int get_lsb(U64 board) {
+    if (board != 0ULL) {
+        return bit_count((board & -board) - 1);
+    }
+    return -1;
+}
+
 U64 eastOne(U64 b) {
     return (b & notHFile) << 1;
 }

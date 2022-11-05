@@ -9,6 +9,8 @@ typedef unsigned long long U64;
 
 static inline int bit_count(U64 board);
 
+static inline int get_lsb(U64 board);
+
 // clang-format off
 
 // board squares
