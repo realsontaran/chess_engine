@@ -7,7 +7,7 @@ int main(int argc, char *argv[]) {
     square sq = e4;
     side sd = white;
     set_bit(board, sq);
-    board |= king_attack_masking(sq);
+    board |= bishop_attack_masking(sq);
 
     printBoard(board);
 

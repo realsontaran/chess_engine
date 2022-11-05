@@ -56,6 +56,32 @@ U64 king_attack_masking(square sq) {
     return attacks;
 }
 
+U64 bishop_attack_masking(square sq) {
+    U64 attacks = 0ULL;
+
+    int rank;
+    int file;
+
+    // Target rank and file
+    int t_rank = sq / 8;
+    int t_file = sq % 8;
+
+    for (rank = t_rank + 1, file = t_file + 1; rank < 7 && file < 7;
+         ++rank, ++file)
+        attacks |= (1ULL << (rank * 8 + file));
+    for (rank = t_rank - 1, file = t_file + 1; rank >= 1 && file < 7;
+         --rank, ++file)
+        attacks |= (1ULL << (rank * 8 + file));
+    for (rank = t_rank + 1, file = t_file - 1; rank < 7 && file >= 1;
+         ++rank, --file)
+        attacks |= (1ULL << (rank * 8 + file));
+    for (rank = t_rank - 1, file = t_file - 1; rank >= 1 && file >= 1;
+         --rank, --file)
+        attacks |= (1ULL << (rank * 8 + file));
+
+    return attacks;
+}
+
 void init_leapers_attacks() {
     for (int sq = 0; sq < 64; ++sq) {
         /* Init pawn attack tables */
