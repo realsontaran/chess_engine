@@ -1,6 +1,15 @@
 #include "bitboard.h"
 #include <stdio.h>
 
+static inline int bit_count(U64 board) {
+    int count = 0;
+    while (board != 0ULL) {
+        count++;
+        board &= board - 1;
+    }
+    return count;
+}
+
 U64 eastOne(U64 b) {
     return (b & notHFile) << 1;
 }

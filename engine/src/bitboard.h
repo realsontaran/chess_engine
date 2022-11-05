@@ -7,6 +7,8 @@ typedef unsigned long long U64;
 #define pop_bit(board, square) \
     (get_bit(board, square) ? (board) ^= (1ULL << (square)) : 0)
 
+static inline int bit_count(U64 board);
+
 // clang-format off
 
 // board squares
