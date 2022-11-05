@@ -107,6 +107,44 @@ U64 rook_attack_masking(square sq) {
     return attacks;
 }
 
+U64 generate_bishop_attacks(square sq, U64 blocks) {
+    U64 attacks = 0ULL;
+
+    int rank;
+    int file;
+
+    // Target rank and file
+    int t_rank = sq / 8;
+    int t_file = sq % 8;
+
+    for (rank = t_rank + 1, file = t_file + 1; rank < 8 && file < 8;
+         ++rank, ++file) {
+        attacks |= (1ULL << (rank * 8 + file));
+        if (((1ULL << (rank * 8 + file)) & blocks) != 0ULL)
+            break;
+    }
+    for (rank = t_rank - 1, file = t_file + 1; rank >= 0 && file < 8;
+         --rank, ++file) {
+        attacks |= (1ULL << (rank * 8 + file));
+        if (((1ULL << (rank * 8 + file)) & blocks) != 0ULL)
+            break;
+    }
+    for (rank = t_rank + 1, file = t_file - 1; rank < 8 && file >= 0;
+         ++rank, --file) {
+        attacks |= (1ULL << (rank * 8 + file));
+        if (((1ULL << (rank * 8 + file)) & blocks) != 0ULL)
+            break;
+    }
+    for (rank = t_rank - 1, file = t_file - 1; rank >= 0 && file >= 0;
+         --rank, --file) {
+        attacks |= (1ULL << (rank * 8 + file));
+        if (((1ULL << (rank * 8 + file)) & blocks) != 0ULL)
+            break;
+    }
+
+    return attacks;
+}
+
 void init_leapers_attacks() {
     for (int sq = 0; sq < 64; ++sq) {
         /* Init pawn attack tables */
