@@ -89,9 +89,10 @@ void printBoard(U64 board) {
             if (file == 0) {
                 printf("  %d ", 8 - rank);
             }
-            printf("%s", get_bit(board, square) ? "[*]" : "[ ]");
+            printf("%s", get_bit(board, square) ? "[#]" : "[ ]");
         }
         printf("\n");
     }
-    printf("     a  b  c  d  e  f  g  h\n\n");
+    printf("     a  b  c  d  e  f  g  h\n");
+    printf("\n   Hex = 0x%llx\n   LLU = %llu\n", board, board);
 }
