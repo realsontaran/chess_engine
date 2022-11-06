@@ -1,10 +1,9 @@
 #include "attack_table.h"
 
-U64 arrPawnAttacks[2][64];
-U64 arrKnightAttacks[64];
-U64 arrKingAttacks[64];
+AttackTables::AttackTables() {
+}
 
-U64 pawn_attack_masking(side sd, square sq) {
+U64 AttackTables::pawn_attack_masking(side sd, square sq) {
     U64 attacks = 0ULL;
     U64 bitboard = 0ULL;
 
@@ -19,7 +18,7 @@ U64 pawn_attack_masking(side sd, square sq) {
     return attacks;
 }
 
-U64 knight_attack_masking(square sq) {
+U64 AttackTables::knight_attack_masking(square sq) {
     U64 attacks = 0ULL;
     U64 bitboard = 0ULL;
 
@@ -37,7 +36,7 @@ U64 knight_attack_masking(square sq) {
     return attacks;
 }
 
-U64 king_attack_masking(square sq) {
+U64 AttackTables::king_attack_masking(square sq) {
     U64 attacks = 0ULL;
     U64 bitboard = 0ULL;
 
@@ -56,7 +55,7 @@ U64 king_attack_masking(square sq) {
     return attacks;
 }
 
-U64 bishop_attack_masking(square sq) {
+U64 AttackTables::bishop_attack_masking(square sq) {
     U64 attacks = 0ULL;
 
     int rank;
@@ -82,7 +81,7 @@ U64 bishop_attack_masking(square sq) {
     return attacks;
 }
 
-U64 rook_attack_masking(square sq) {
+U64 AttackTables::rook_attack_masking(square sq) {
     U64 attacks = 0ULL;
 
     int rank;
@@ -107,7 +106,7 @@ U64 rook_attack_masking(square sq) {
     return attacks;
 }
 
-U64 generate_bishop_attacks(square sq, U64 blocks) {
+U64 AttackTables::generate_bishop_attacks(square sq, U64 blocks) {
     U64 attacks = 0ULL;
 
     int rank;
@@ -145,7 +144,7 @@ U64 generate_bishop_attacks(square sq, U64 blocks) {
     return attacks;
 }
 
-U64 generate_rook_attacks(square sq, U64 blocks) {
+U64 AttackTables::generate_rook_attacks(square sq, U64 blocks) {
     U64 attacks = 0ULL;
 
     int rank;
@@ -181,7 +180,7 @@ U64 generate_rook_attacks(square sq, U64 blocks) {
     return attacks;
 }
 
-void init_leapers_attacks() {
+void AttackTables::init_leapers_attacks() {
     for (int sq = 0; sq < 64; ++sq) {
         /* Init pawn attack tables */
         arrPawnAttacks[white][sq] = pawn_attack_masking(white, (square)sq);

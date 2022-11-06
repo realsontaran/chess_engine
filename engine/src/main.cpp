@@ -1,4 +1,3 @@
-#include "bitboard.h"
 #include "attack_table.h"
 #include <iostream>
 
@@ -11,7 +10,6 @@ int main(int argc, char *argv[]) {
     set_bit(blocks, f2);
     set_bit(blocks, c6);
     set_bit(blocks, b2);
-    board |= generate_rook_attacks(sq, blocks);
 
     printBoard(board);
 

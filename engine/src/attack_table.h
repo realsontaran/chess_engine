@@ -3,15 +3,24 @@
 
 #include "bitboard.h"
 
-U64 pawn_attack_masking(side sd, square sq);
-U64 knight_attack_masking(square sq);
-U64 king_attack_masking(square sq);
-U64 bishop_attack_masking(square sq);
-U64 rook_attack_masking(square sq);
+class AttackTables {
+  public:
+    AttackTables();
+    virtual ~AttackTables();
 
-U64 generate_bishop_attacks(square sq, U64 blocks);
-U64 generate_rook_attacks(square sq, U64 blocks);
+    void init_leapers_attacks();
 
-void init_leapers_attacks();
+    U64 arrPawnAttacks[2][64];
+    U64 arrKnightAttacks[64];
+    U64 arrKingAttacks[64];
 
+  private:
+    static U64 pawn_attack_masking(side sd, square sq);
+    static U64 knight_attack_masking(square sq);
+    static U64 king_attack_masking(square sq);
+    static U64 bishop_attack_masking(square sq);
+    static U64 rook_attack_masking(square sq);
+    static U64 generate_bishop_attacks(square sq, U64 blocks);
+    static U64 generate_rook_attacks(square sq, U64 blocks);
+};
 #endif // ATTACK_TABLE_H_
