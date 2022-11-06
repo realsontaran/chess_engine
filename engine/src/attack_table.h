@@ -8,13 +8,12 @@ class AttackTables {
     AttackTables();
     virtual ~AttackTables();
 
-    void init_leapers_attacks();
-
     U64 arrPawnAttacks[2][64];
     U64 arrKnightAttacks[64];
     U64 arrKingAttacks[64];
 
   private:
+    void init_leapers_attacks();
     static U64 pawn_attack_masking(side sd, square sq);
     static U64 knight_attack_masking(square sq);
     static U64 king_attack_masking(square sq);

@@ -1,6 +1,10 @@
 #include "attack_table.h"
 
 AttackTables::AttackTables() {
+    init_leapers_attacks();
+}
+
+AttackTables::~AttackTables() {
 }
 
 U64 AttackTables::pawn_attack_masking(side sd, square sq) {
