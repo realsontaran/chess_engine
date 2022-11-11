@@ -6,8 +6,8 @@ typedef unsigned long long U64;
 #define get_bit(board, sq) ((board) & (1ULL << (sq)))
 #define pop_bit(board, sq) (get_bit(board, sq) ? (board) ^= (1ULL << (sq)) : 0)
 
-inline int bit_count(U64 board) {
-    int count = 0;
+inline unsigned int bit_count(U64 board) {
+    unsigned int count = 0;
     while (board != 0ULL) {
         count++;
         board &= board - 1;
@@ -15,11 +15,11 @@ inline int bit_count(U64 board) {
     return count;
 }
 
-inline int get_lsb(U64 board) {
+inline unsigned int get_lsb(U64 board) {
     if (board != 0ULL) {
         return bit_count((board & -board) - 1);
     }
-    return -1;
+    return 0;
 }
 
 // clang-format off
