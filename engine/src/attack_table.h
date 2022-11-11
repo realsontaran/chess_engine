@@ -2,7 +2,6 @@
 #define ATTACK_TABLE_H_
 
 #include "bitboard.h"
-#include "relevant_bits.h"
 
 class AttackTables {
   public:
@@ -14,6 +13,9 @@ class AttackTables {
     U64 arrKingAttacks[64];
 
   private:
+    const static int bishop_relevant_bits[];
+    const static int rook_relevant_bits[];
+
     void init_leapers_attacks();
     static U64 pawn_attack_masking(side sd, square sq);
     static U64 knight_attack_masking(square sq);
