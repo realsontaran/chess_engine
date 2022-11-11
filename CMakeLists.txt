@@ -19,8 +19,9 @@ include(CompilerOptions)
 include(CTest)
 include(DoctestIntegration)
 
-include_directories(include)
+include_directories(include/doctest)
 # == project modules ==
 
 add_subdirectory(engine)
-# add_subdirectory(test)
+add_subdirectory(example)
+add_subdirectory(test)

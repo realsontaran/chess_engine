@@ -1,8 +1,21 @@
-cmake_minimum_required(VERSION 3.16)
+set(ENGINE_SRC
+  "src/bitboard.cpp"
+  "src/attack_table.cpp"
+  "src/prng.cpp"
+ )
 
-project (
+add_library (
   chess_engine
-  VERSION 0.1.0
-  LANGUAGES CXX)
+  ${ENGINE_SRC}
+ )
 
-add_executable(${PROJECT_NAME} src/main.cpp src/bitboard.cpp src/attack_table.cpp src/prng.cpp)
+target_compile_features(chess_engine PRIVATE cxx_std_20)
+target_compile_options(chess_engine PUBLIC ${COMPILE_OPTIONS})
+set_target_properties(
+    chess_engine PROPERTIES
+    OUTPUT_NAME chess_engine
+    EXPORT_NAME lib
+    CXX_EXTENSIONS OFF
+)
+
+target_include_directories(chess_engine PUBLIC "include")
