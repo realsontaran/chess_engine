@@ -184,16 +184,34 @@ U64 AttackTables::generate_rook_attacks(square sq, U64 blocks) {
     return attacks;
 }
 
+/*
+ * Calculate all occupancy variations from given attack mask
+ */
+U64 AttackTables::set_occupancy_map(int index, int bit_count, U64 attack_mask) {
+    U64 occupancy_map = 0ULL;
+    for (int bits = 0; bits < bit_count; ++bits) {
+        square sq = static_cast<square>(get_lsb(attack_mask));
+        pop_bit(attack_mask, sq);
+        if ((index & (1 << bit_count)) != 0) {
+            occupancy_map |= (1ULL << sq);
+        }
+    }
+
+    return occupancy_map;
+}
+
 void AttackTables::init_leapers_attacks() {
     for (int sq = 0; sq < 64; ++sq) {
         /* Init pawn attack tables */
-        arrPawnAttacks[white][sq] = pawn_attack_masking(white, (square)sq);
-        arrPawnAttacks[black][sq] = pawn_attack_masking(black, (square)sq);
+        arrPawnAttacks[white][sq] =
+            pawn_attack_masking(white, static_cast<square>(sq));
+        arrPawnAttacks[black][sq] =
+            pawn_attack_masking(black, static_cast<square>(sq));
 
         /* Init pawn attack tables */
-        arrKnightAttacks[sq] = knight_attack_masking((square)sq);
+        arrKnightAttacks[sq] = knight_attack_masking(static_cast<square>(sq));
 
         /* Init king attack tables */
-        arrKingAttacks[sq] = king_attack_masking((square)sq);
+        arrKingAttacks[sq] = king_attack_masking(static_cast<square>(sq));
     }
 }
