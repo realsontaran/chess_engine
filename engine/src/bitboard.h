@@ -2,14 +2,25 @@
 #define BITBOARD_H_
 
 typedef unsigned long long U64;
-#define set_bit(board, square) ((board) |= (1ULL << (square)))
-#define get_bit(board, square) ((board) & (1ULL << (square)))
-#define pop_bit(board, square) \
-    (get_bit(board, square) ? (board) ^= (1ULL << (square)) : 0)
+#define set_bit(board, sq) ((board) |= (1ULL << (sq)))
+#define get_bit(board, sq) ((board) & (1ULL << (sq)))
+#define pop_bit(board, sq) (get_bit(board, sq) ? (board) ^= (1ULL << (sq)) : 0)
 
-static inline int bit_count(U64 board);
+inline int bit_count(U64 board) {
+    int count = 0;
+    while (board != 0ULL) {
+        count++;
+        board &= board - 1;
+    }
+    return count;
+}
 
-static inline int get_lsb(U64 board);
+inline int get_lsb(U64 board) {
+    if (board != 0ULL) {
+        return bit_count((board & -board) - 1);
+    }
+    return -1;
+}
 
 // clang-format off
 
