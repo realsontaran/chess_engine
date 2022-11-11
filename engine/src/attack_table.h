@@ -2,6 +2,7 @@
 #define ATTACK_TABLE_H_
 
 #include "bitboard.h"
+#include "relevant_bits.h"
 
 class AttackTables {
   public:
