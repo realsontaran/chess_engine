@@ -1,4 +1,4 @@
-#include "attack_table.h"
+#include <attack_table.h>
 
 // clang-format off
 const int AttackTables::bishop_relevant_bits[] = {

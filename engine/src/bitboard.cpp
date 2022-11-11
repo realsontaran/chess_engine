@@ -1,4 +1,4 @@
-#include "bitboard.h"
+#include <bitboard.h>
 #include <stdio.h>
 
 U64 eastOne(U64 b) {
