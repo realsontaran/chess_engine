@@ -5,4 +5,4 @@ project (
   VERSION 0.1.0
   LANGUAGES CXX)
 
-add_executable(${PROJECT_NAME} src/main.cpp src/bitboard.cpp src/attack_table.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/bitboard.cpp src/attack_table.cpp src/prng.cpp)
