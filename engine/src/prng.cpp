@@ -27,10 +27,10 @@ U64 get_random_U64() {
     U64 n4;
 
     // init random numbers slicing 16 bits from MS1B side
-    n1 = static_cast<U64>((get_random_U32() & 0xFFFF));
-    n2 = static_cast<U64>((get_random_U32() & 0xFFFF));
-    n3 = static_cast<U64>((get_random_U32() & 0xFFFF));
-    n4 = static_cast<U64>((get_random_U32() & 0xFFFF));
+    n1 = static_cast<U64>(get_random_U32()) & 0xFFFF;
+    n2 = static_cast<U64>(get_random_U32()) & 0xFFFF;
+    n3 = static_cast<U64>(get_random_U32()) & 0xFFFF;
+    n4 = static_cast<U64>(get_random_U32()) & 0xFFFF;
 
     // return random number
     return n1 | (n2 << 16) | (n3 << 32) | (n4 << 48);

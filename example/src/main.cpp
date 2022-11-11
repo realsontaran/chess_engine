@@ -1,12 +1,12 @@
-#include <prng.h>
+#include <magic.h>
 #include <attack_table.h>
+#include <bitboard.h>
+#include <cstdio>
+#include <strings.h>
 
 int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
 
-    AttackTables table;
-
-    printBoard(table.arrKnightAttacks[e4]);
     return 0;
 }
