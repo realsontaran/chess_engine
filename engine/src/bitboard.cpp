@@ -66,14 +66,14 @@ U64 soWeWe(U64 b) {
     return (b & Bitboard::notAorBFile) << 6;
 }
 
-void printBoard(U64 board) {
+void Bitboard::printBoard(U64 board) {
     for (int rank = 0; rank < 8; ++rank) {
         for (int file = 0; file < 8; ++file) {
             int square = rank * 8 + file;
             if (file == 0) {
                 printf("  %d ", 8 - rank);
             }
-            printf("%s", get_bit(board, square) ? "[#]" : "[ ]");
+            printf("%s", get_bit(board, square) != 0U ? "[#]" : "[ ]");
         }
         printf("\n");
     }

@@ -6,7 +6,7 @@ using namespace Bitboard;
 
 TEST_CASE("test knight attack table") {
     AttackTables table;
-    CHECK(table.arrKnightAttacks[e4] == 11333767002587136);
+    CHECK(table.arrKnightAttacks[Square::e4] == 11333767002587136);
 }
 
 TEST_CASE("test king attack table") {

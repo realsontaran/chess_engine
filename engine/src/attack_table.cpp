@@ -83,7 +83,7 @@ const U64 AttackTables::bishopMagics[] = {
     0x28000010020204ULL,   0x6000020202d0240ULL,  0x8918844842082200ULL,
     0x4010011029020020ULL};
 
-U64 AttackTables::pawnAttackMask(Bitboard::side sd, Bitboard::square sq) {
+U64 AttackTables::pawnAttackMask(Bitboard::Side sd, Bitboard::Square sq) {
     U64 attacks = 0ULL;
     U64 bitboard = 0ULL;
 
@@ -98,7 +98,7 @@ U64 AttackTables::pawnAttackMask(Bitboard::side sd, Bitboard::square sq) {
     return attacks;
 }
 
-U64 AttackTables::knightAttackMask(Bitboard::square sq) {
+U64 AttackTables::knightAttackMask(Bitboard::Square sq) {
     U64 attacks = 0ULL;
     U64 bitboard = 0ULL;
 
@@ -116,7 +116,7 @@ U64 AttackTables::knightAttackMask(Bitboard::square sq) {
     return attacks;
 }
 
-U64 AttackTables::kingAttackMask(Bitboard::square sq) {
+U64 AttackTables::kingAttackMask(Bitboard::Square sq) {
     U64 attacks = 0ULL;
     U64 bitboard = 0ULL;
 
@@ -135,7 +135,7 @@ U64 AttackTables::kingAttackMask(Bitboard::square sq) {
     return attacks;
 }
 
-U64 AttackTables::bishopAttackMask(Bitboard::square sq) {
+U64 AttackTables::bishopAttackMask(Bitboard::Square sq) {
     U64 attacks = 0ULL;
 
     int rank;
@@ -160,7 +160,7 @@ U64 AttackTables::bishopAttackMask(Bitboard::square sq) {
     return attacks;
 }
 
-U64 AttackTables::rookAttackMask(Bitboard::square sq) {
+U64 AttackTables::rookAttackMask(Bitboard::Square sq) {
     U64 attacks = 0ULL;
 
     int rank;
@@ -185,7 +185,7 @@ U64 AttackTables::rookAttackMask(Bitboard::square sq) {
     return attacks;
 }
 
-U64 AttackTables::generateBishopAttacks(Bitboard::square sq, U64 blocks) {
+U64 AttackTables::generateBishopAttacks(Bitboard::Square sq, U64 blocks) {
     U64 attacks = 0ULL;
 
     int rank;
@@ -223,7 +223,7 @@ U64 AttackTables::generateBishopAttacks(Bitboard::square sq, U64 blocks) {
     return attacks;
 }
 
-U64 AttackTables::generateRookAttacks(Bitboard::square sq, U64 blocks) {
+U64 AttackTables::generateRookAttacks(Bitboard::Square sq, U64 blocks) {
     U64 attacks = 0ULL;
 
     int rank;
@@ -265,8 +265,8 @@ U64 AttackTables::generateRookAttacks(Bitboard::square sq, U64 blocks) {
 U64 AttackTables::setOccupancies(int index, int bits_in_mask, U64 attack_mask) {
     U64 occupancy_map = 0ULL;
     for (int bits = 0; bits < bits_in_mask; ++bits) {
-        unsigned int sq = get_lsb(attack_mask);
-        pop_bit(attack_mask, sq);
+        unsigned int sq = Bitboard::get_lsb(attack_mask);
+        Bitboard::pop_bit(attack_mask, static_cast<int>(sq));
         if ((index & (1 << bits)) != 0) {
             occupancy_map |= (1ULL << sq);
         }
@@ -274,7 +274,7 @@ U64 AttackTables::setOccupancies(int index, int bits_in_mask, U64 attack_mask) {
     return occupancy_map;
 }
 
-U64 AttackTables::findMagics(Bitboard::square sq, int relevant_bits,
+U64 AttackTables::findMagics(Bitboard::Square sq, int relevant_bits,
                              bool bishop) {
     // init occupancies
     U64 occupancies[4096];
@@ -306,7 +306,8 @@ U64 AttackTables::findMagics(Bitboard::square sq, int relevant_bits,
         U64 magic_number = generate_magic_number();
 
         // skip inappropriate magic numbers
-        if (bit_count((attack_mask * magic_number) & 0xFF00000000000000) < 6)
+        if (Bitboard::bit_count((attack_mask * magic_number) &
+                                0xFF00000000000000) < 6)
             continue;
 
         // init used attacks
@@ -343,12 +344,13 @@ U64 AttackTables::findMagics(Bitboard::square sq, int relevant_bits,
 
 void AttackTables::initSliders(bool bishop) {
     for (int sq = 0; sq < 64; sq++) {
-        bishopMasks[sq] = bishopAttackMask(static_cast<Bitboard::square>(sq));
+        bishopMasks[sq] = bishopAttackMask(static_cast<Bitboard::Square>(sq));
 
-        rookMasks[sq] = rookAttackMask(static_cast<Bitboard::square>(sq));
+        rookMasks[sq] = rookAttackMask(static_cast<Bitboard::Square>(sq));
 
         U64 attack_mask = bishop ? bishopMasks[sq] : rookMasks[sq];
-        int relevant_bit_count = static_cast<int>(bit_count(attack_mask));
+        int relevant_bit_count =
+            static_cast<int>(Bitboard::bit_count(attack_mask));
         int occupancy_indices = (1 << relevant_bit_count);
 
         for (int index = 0; index < occupancy_indices; ++index) {
@@ -358,27 +360,27 @@ void AttackTables::initSliders(bool bishop) {
                 int magic_index = static_cast<int>((occ * bishopMagics[sq]) >>
                                                    (64 - bishopRelevants[sq]));
                 arrBishopAttacks[sq][magic_index] = generateBishopAttacks(
-                    static_cast<Bitboard::square>(sq), occ);
+                    static_cast<Bitboard::Square>(sq), occ);
             } else {
                 U64 occ =
                     setOccupancies(index, relevant_bit_count, attack_mask);
                 int magic_index = static_cast<int>((occ * rookMagics[sq]) >>
                                                    (64 - rookRelevants[sq]));
                 arrRookAttacks[sq][magic_index] =
-                    generateRookAttacks(static_cast<Bitboard::square>(sq), occ);
+                    generateRookAttacks(static_cast<Bitboard::Square>(sq), occ);
             }
         }
     }
 }
 
-U64 AttackTables::getRookAttacks(Bitboard::square sq, U64 occ) {
+U64 AttackTables::getRookAttacks(Bitboard::Square sq, U64 occ) {
     occ &= rookMasks[sq];
     occ *= rookMagics[sq];
     occ >>= (64 - rookRelevants[sq]);
     return arrRookAttacks[sq][occ];
 }
 
-U64 AttackTables::getBishopAttacks(Bitboard::square sq, U64 occ) {
+U64 AttackTables::getBishopAttacks(Bitboard::Square sq, U64 occ) {
     occ &= bishopMasks[sq];
     occ *= bishopMagics[sq];
     occ >>= (64 - bishopRelevants[sq]);
@@ -387,11 +389,11 @@ U64 AttackTables::getBishopAttacks(Bitboard::square sq, U64 occ) {
 
 void AttackTables::initMagics() { // NOLINT
     for (int sq = 0; sq < 64; sq++)
-        printf(" 0x%llxULL\n", findMagics(static_cast<Bitboard::square>(sq),
+        printf(" 0x%llxULL\n", findMagics(static_cast<Bitboard::Square>(sq),
                                           rookRelevants[sq], false));
 
     for (int sq = 0; sq < 64; sq++)
-        printf("0x%llxULL\n", findMagics(static_cast<Bitboard::square>(sq),
+        printf("0x%llxULL\n", findMagics(static_cast<Bitboard::Square>(sq),
                                          bishopRelevants[sq], true));
 }
 
@@ -399,16 +401,16 @@ void AttackTables::initLeapers() {
     for (int sq = 0; sq < 64; ++sq) {
         /* Init pawn attack tables */
         arrPawnAttacks[Bitboard::white][sq] =
-            pawnAttackMask(Bitboard::white, static_cast<Bitboard::square>(sq));
+            pawnAttackMask(Bitboard::white, static_cast<Bitboard::Square>(sq));
         arrPawnAttacks[Bitboard::black][sq] =
-            pawnAttackMask(Bitboard::black, static_cast<Bitboard::square>(sq));
+            pawnAttackMask(Bitboard::black, static_cast<Bitboard::Square>(sq));
 
         /* Init pawn attack tables */
         arrKnightAttacks[sq] =
-            knightAttackMask(static_cast<Bitboard::square>(sq));
+            knightAttackMask(static_cast<Bitboard::Square>(sq));
 
         /* Init king attack tables */
-        arrKingAttacks[sq] = kingAttackMask(static_cast<Bitboard::square>(sq));
+        arrKingAttacks[sq] = kingAttackMask(static_cast<Bitboard::Square>(sq));
     }
 }
 
