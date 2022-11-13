@@ -2,6 +2,7 @@ set(ENGINE_SRC
   "src/bitboard.cpp"
   "src/attack_table.cpp"
   "src/prng.cpp"
+  "src/game_state.cpp"
  )
 
 add_library (

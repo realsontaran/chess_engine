@@ -1,3 +1,4 @@
+#include <game_state.h>
 #include <attack_table.h>
 #include <bitboard.h>
 #include <cstdio>
@@ -6,6 +7,5 @@
 int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
-
     return 0;
 }
