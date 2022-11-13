@@ -9,28 +9,35 @@ class AttackTables {
     AttackTables();
     virtual ~AttackTables();
 
-    void init_all();
     U64 arrPawnAttacks[2][64];
     U64 arrKnightAttacks[64];
     U64 arrKingAttacks[64];
+    U64 arrRookAttacks[64][4096];
+    U64 arrBishopAttacks[64][512];
 
   private:
-    const static int bishop_relevant_bits[];
-    const static int rook_relevant_bits[];
-    const static U64 rook_magic_numbers[];
-    const static U64 bishop_magic_numbers[];
+    const static int bishopRelevants[];
+    const static int rookRelevants[];
+    const static U64 bishopMagics[];
+    const static U64 rookMagics[];
 
-    void init_leapers_attacks();
-    void init_magic_numbers();
-    static U64 pawn_attack_masking(Bitboard::side sd, Bitboard::square sq);
-    static U64 knight_attack_masking(Bitboard::square sq);
-    static U64 king_attack_masking(Bitboard::square sq);
-    static U64 bishop_attack_masking(Bitboard::square sq);
-    static U64 rook_attack_masking(Bitboard::square sq);
-    static U64 generate_bishop_attacks(Bitboard::square sq, U64 blocks);
-    static U64 generate_rook_attacks(Bitboard::square sq, U64 blocks);
-    static U64 set_occupancy_map(int index, int bits_in_mask, U64 attack_mask);
-    static U64 find_magic_number(Bitboard::square sq, int relevant_bits,
-                                 bool bishop);
+    U64 bishopMasks[64];
+    U64 rookMasks[64];
+
+    void initAll();
+    void initLeapers();
+    void initSliders(bool bishop);
+    void initMagics();
+    static U64 pawnAttackMask(Bitboard::side sd, Bitboard::square sq);
+    static U64 knightAttackMask(Bitboard::square sq);
+    static U64 kingAttackMask(Bitboard::square sq);
+    static U64 bishopAttackMask(Bitboard::square sq);
+    static U64 rookAttackMask(Bitboard::square sq);
+    static U64 generateBishopAttacks(Bitboard::square sq, U64 blocks);
+    static U64 generateRookAttacks(Bitboard::square sq, U64 blocks);
+    U64 getRookAttacks(Bitboard::square sq, U64 occ);
+    U64 getBishopAttacks(Bitboard::square sq, U64 occ);
+    static U64 setOccupancies(int index, int bits_in_mask, U64 attack_mask);
+    static U64 findMagics(Bitboard::square sq, int relevant_bits, bool bishop);
 };
 #endif // ATTACK_TABLE_H_
