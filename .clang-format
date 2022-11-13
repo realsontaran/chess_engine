@@ -10,7 +10,7 @@ ColumnLimit: 80
 IndentWidth: 4
 SortIncludes: false
 BreakConstructorInitializers: BeforeComma
-NamespaceIndentation: None
+NamespaceIndentation: All
 QualifierAlignment: Right
 AlignTrailingComments: true
 AlignEscapedNewlines: Left
