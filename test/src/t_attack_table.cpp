@@ -1,5 +1,6 @@
 #include <doctest.h>
 #include <attack_table.h>
+using namespace Bitboard;
 
 /* Numbers generated using https://tearth.dev/bitboard-viewer/ */
 

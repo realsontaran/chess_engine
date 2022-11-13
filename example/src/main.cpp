@@ -1,4 +1,3 @@
-#include <magic.h>
 #include <attack_table.h>
 #include <bitboard.h>
 #include <cstdio>

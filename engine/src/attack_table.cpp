@@ -26,7 +26,7 @@ const int AttackTables::rook_relevant_bits[] = {
 };
 
 // rook magic numbers
-const U64 rook_magic_numbers[] = {
+const U64 AttackTables::rook_magic_numbers[] = {
     0x8a80104000800020ULL,
     0x140002000100040ULL,
     0x2801880a0017001ULL,
@@ -94,7 +94,7 @@ const U64 rook_magic_numbers[] = {
 };
 
 // bishop magic numbers
-const U64 bishop_magic_numbers[] = {
+const U64 AttackTables::bishop_magic_numbers[] = {
     0x40040844404084ULL,
     0x2004208a004208ULL,
     0x10190041080202ULL,
@@ -169,12 +169,12 @@ AttackTables::AttackTables() {
 AttackTables::~AttackTables() {
 }
 
-U64 AttackTables::pawn_attack_masking(side sd, square sq) {
+U64 AttackTables::pawn_attack_masking(Bitboard::side sd, Bitboard::square sq) {
     U64 attacks = 0ULL;
     U64 bitboard = 0ULL;
 
     set_bit(bitboard, sq);
-    if (sd == white) {
+    if (sd == Bitboard::white) {
         attacks |= noWeOne(bitboard);
         attacks |= noEaOne(bitboard);
     } else {
@@ -184,7 +184,7 @@ U64 AttackTables::pawn_attack_masking(side sd, square sq) {
     return attacks;
 }
 
-U64 AttackTables::knight_attack_masking(square sq) {
+U64 AttackTables::knight_attack_masking(Bitboard::square sq) {
     U64 attacks = 0ULL;
     U64 bitboard = 0ULL;
 
@@ -202,7 +202,7 @@ U64 AttackTables::knight_attack_masking(square sq) {
     return attacks;
 }
 
-U64 AttackTables::king_attack_masking(square sq) {
+U64 AttackTables::king_attack_masking(Bitboard::square sq) {
     U64 attacks = 0ULL;
     U64 bitboard = 0ULL;
 
@@ -221,7 +221,7 @@ U64 AttackTables::king_attack_masking(square sq) {
     return attacks;
 }
 
-U64 AttackTables::bishop_attack_masking(square sq) {
+U64 AttackTables::bishop_attack_masking(Bitboard::square sq) {
     U64 attacks = 0ULL;
 
     int rank;
@@ -243,11 +243,10 @@ U64 AttackTables::bishop_attack_masking(square sq) {
     for (rank = t_rank - 1, file = t_file - 1; rank >= 1 && file >= 1;
          --rank, --file)
         attacks |= (1ULL << (rank * 8 + file));
-
     return attacks;
 }
 
-U64 AttackTables::rook_attack_masking(square sq) {
+U64 AttackTables::rook_attack_masking(Bitboard::square sq) {
     U64 attacks = 0ULL;
 
     int rank;
@@ -272,7 +271,7 @@ U64 AttackTables::rook_attack_masking(square sq) {
     return attacks;
 }
 
-U64 AttackTables::generate_bishop_attacks(square sq, U64 blocks) {
+U64 AttackTables::generate_bishop_attacks(Bitboard::square sq, U64 blocks) {
     U64 attacks = 0ULL;
 
     int rank;
@@ -310,7 +309,7 @@ U64 AttackTables::generate_bishop_attacks(square sq, U64 blocks) {
     return attacks;
 }
 
-U64 AttackTables::generate_rook_attacks(square sq, U64 blocks) {
+U64 AttackTables::generate_rook_attacks(Bitboard::square sq, U64 blocks) {
     U64 attacks = 0ULL;
 
     int rank;
@@ -349,9 +348,10 @@ U64 AttackTables::generate_rook_attacks(square sq, U64 blocks) {
 /*
  * Calculate all occupancy variations from given attack mask
  */
-U64 AttackTables::set_occupancy_map(int index, int bit_count, U64 attack_mask) {
+U64 AttackTables::set_occupancy_map(int index, int bits_in_mask,
+                                    U64 attack_mask) {
     U64 occupancy_map = 0ULL;
-    for (int bits = 0; bits < bit_count; ++bits) {
+    for (int bits = 0; bits < bits_in_mask; ++bits) {
         unsigned int sq = get_lsb(attack_mask);
         pop_bit(attack_mask, sq);
         if ((index & (1 << bits)) != 0) {
@@ -361,7 +361,8 @@ U64 AttackTables::set_occupancy_map(int index, int bit_count, U64 attack_mask) {
     return occupancy_map;
 }
 
-U64 AttackTables::find_magic_number(square sq, int relevant_bits, bool bishop) {
+U64 AttackTables::find_magic_number(Bitboard::square sq, int relevant_bits,
+                                    bool bishop) {
     // init occupancies
     U64 occupancies[4096];
 
@@ -402,8 +403,8 @@ U64 AttackTables::find_magic_number(square sq, int relevant_bits, bool bishop) {
         memset(used_attacks, 0ULL, sizeof(used_attacks));
 
         // init index & fail flag
-        int index = 0;
-        int fail = 0;
+        int index;
+        int fail;
 
         // test magic index loop
         for (index = 0, fail = 0; (fail == 0) && index < occupancy_indicies;
@@ -430,32 +431,37 @@ U64 AttackTables::find_magic_number(square sq, int relevant_bits, bool bishop) {
     return 0ULL;
 }
 
-void AttackTables::init_magic_numbers() {
-    // loop over 64 board squares
+void AttackTables::init_magic_numbers() { // NOLINT
     for (int sq = 0; sq < 64; sq++)
         printf(" 0x%llxULL\n",
-               find_magic_number(static_cast<square>(sq),
+               find_magic_number(static_cast<Bitboard::square>(sq),
                                  rook_relevant_bits[sq], false));
 
-    // loop over 64 board squares
     for (int sq = 0; sq < 64; sq++)
         printf("0x%llxULL\n",
-               find_magic_number(static_cast<square>(sq),
+               find_magic_number(static_cast<Bitboard::square>(sq),
                                  bishop_relevant_bits[sq], true));
 }
 
 void AttackTables::init_leapers_attacks() {
     for (int sq = 0; sq < 64; ++sq) {
         /* Init pawn attack tables */
-        arrPawnAttacks[white][sq] =
-            pawn_attack_masking(white, static_cast<square>(sq));
-        arrPawnAttacks[black][sq] =
-            pawn_attack_masking(black, static_cast<square>(sq));
+        arrPawnAttacks[Bitboard::white][sq] = pawn_attack_masking(
+            Bitboard::white, static_cast<Bitboard::square>(sq));
+        arrPawnAttacks[Bitboard::black][sq] = pawn_attack_masking(
+            Bitboard::black, static_cast<Bitboard::square>(sq));
 
         /* Init pawn attack tables */
-        arrKnightAttacks[sq] = knight_attack_masking(static_cast<square>(sq));
+        arrKnightAttacks[sq] =
+            knight_attack_masking(static_cast<Bitboard::square>(sq));
 
         /* Init king attack tables */
-        arrKingAttacks[sq] = king_attack_masking(static_cast<square>(sq));
+        arrKingAttacks[sq] =
+            king_attack_masking(static_cast<Bitboard::square>(sq));
     }
+}
+
+void AttackTables::init_all() {
+    init_leapers_attacks();
+    // init_magic_numbers();
 }

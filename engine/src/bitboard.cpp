@@ -2,27 +2,27 @@
 #include <stdio.h>
 
 U64 eastOne(U64 b) {
-    return (b & notHFile) << 1;
+    return (b & Bitboard::notHFile) << 1;
 }
 
 U64 noEaOne(U64 b) {
-    return (b & notHFile) >> 7;
+    return (b & Bitboard::notHFile) >> 7;
 }
 
 U64 soEaOne(U64 b) {
-    return (b & notHFile) << 9;
+    return (b & Bitboard::notHFile) << 9;
 }
 
 U64 westOne(U64 b) {
-    return (b & notAFile) >> 1;
+    return (b & Bitboard::notAFile) >> 1;
 }
 
 U64 soWeOne(U64 b) {
-    return (b & notAFile) << 7;
+    return (b & Bitboard::notAFile) << 7;
 }
 
 U64 noWeOne(U64 b) {
-    return (b & notAFile) >> 9;
+    return (b & Bitboard::notAFile) >> 9;
 }
 
 U64 soutOne(U64 b) {
@@ -34,36 +34,36 @@ U64 nortOne(U64 b) {
 }
 
 U64 noNoEa(U64 b) {
-    return (b & notHFile) >> 15;
+    return (b & Bitboard::notHFile) >> 15;
 }
 
 U64 noNoWe(U64 b) {
-    return (b & notAFile) >> 17;
+    return (b & Bitboard::notAFile) >> 17;
 }
 
 U64 soSoEa(U64 b) {
-    return (b & notHFile) << 17;
+    return (b & Bitboard::notHFile) << 17;
 }
 
 U64 soSoWe(U64 b) {
-    return (b & notAFile) << 15;
+    return (b & Bitboard::notAFile) << 15;
 }
 
 /* Knight Movements */
 U64 noEaEa(U64 b) {
-    return (b & notHorGFile) >> 6;
+    return (b & Bitboard::notHorGFile) >> 6;
 }
 
 U64 soEaEa(U64 b) {
-    return (b & notHorGFile) << 10;
+    return (b & Bitboard::notHorGFile) << 10;
 }
 
 U64 noWeWe(U64 b) {
-    return (b & notAorBFile) >> 10;
+    return (b & Bitboard::notAorBFile) >> 10;
 }
 
 U64 soWeWe(U64 b) {
-    return (b & notAorBFile) << 6;
+    return (b & Bitboard::notAorBFile) << 6;
 }
 
 void printBoard(U64 board) {
