@@ -17,7 +17,7 @@ namespace Bitboard {
     }
 
     constexpr unsigned int bit_count(U64 board) {
-        unsigned int count;
+        unsigned int count = 0;
         for (count = 0; board != 0ULL; ++count, board &= board - 1)
             ;
         return count;
