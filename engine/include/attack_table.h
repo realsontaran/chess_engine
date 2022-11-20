@@ -2,6 +2,7 @@
 #define ATTACK_TABLE_H_
 
 #include <bitboard.h>
+#include <types.h>
 #include <prng.h>
 
 class AttackTables {
@@ -28,16 +29,16 @@ class AttackTables {
     void initLeapers();
     void initSliders(bool bishop);
     void initMagics();
-    static U64 pawnAttackMask(Bitboard::Side sd, Bitboard::Square sq);
-    static U64 knightAttackMask(Bitboard::Square sq);
-    static U64 kingAttackMask(Bitboard::Square sq);
-    static U64 bishopAttackMask(Bitboard::Square sq);
-    static U64 rookAttackMask(Bitboard::Square sq);
-    static U64 generateBishopAttacks(Bitboard::Square sq, U64 blocks);
-    static U64 generateRookAttacks(Bitboard::Square sq, U64 blocks);
-    U64 getRookAttacks(Bitboard::Square sq, U64 occ);
-    U64 getBishopAttacks(Bitboard::Square sq, U64 occ);
+    static U64 pawnAttackMask(Types::Side sd, Types::Square sq);
+    static U64 knightAttackMask(Types::Square sq);
+    static U64 kingAttackMask(Types::Square sq);
+    static U64 bishopAttackMask(Types::Square sq);
+    static U64 rookAttackMask(Types::Square sq);
+    static U64 generateBishopAttacks(Types::Square sq, U64 blocks);
+    static U64 generateRookAttacks(Types::Square sq, U64 blocks);
+    U64 getRookAttacks(Types::Square sq, U64 occ);
+    U64 getBishopAttacks(Types::Square sq, U64 occ);
     static U64 setOccupancies(int index, int bits_in_mask, U64 attack_mask);
-    static U64 findMagics(Bitboard::Square sq, int relevant_bits, bool bishop);
+    static U64 findMagics(Types::Square sq, int relevant_bits, bool bishop);
 };
 #endif // ATTACK_TABLE_H_
