@@ -379,6 +379,25 @@ U64 AttackTables::getRookAttacks(Types::Square sq, U64 occ) {
     return arrRookAttacks[sq][occ];
 }
 
+U64 AttackTables::getQueenAttacks(Types::Square sq, U64 occ) {
+    U64 queen_attacks = 0ULL;
+    U64 bishop_occ = occ;
+    U64 rook_occ = occ;
+
+    bishop_occ &= bishopMasks[sq];
+    bishop_occ *= bishopMagics[sq];
+    bishop_occ >>= (64 - bishopRelevants[sq]);
+
+    queen_attacks = arrBishopAttacks[sq][bishop_occ];
+
+    rook_occ &= rookMasks[sq];
+    rook_occ *= rookMagics[sq];
+    rook_occ >>= (64 - rookRelevants[sq]);
+    queen_attacks |= arrRookAttacks[sq][rook_occ];
+
+    return queen_attacks;
+}
+
 U64 AttackTables::getBishopAttacks(Types::Square sq, U64 occ) {
     occ &= bishopMasks[sq];
     occ *= bishopMagics[sq];

@@ -38,6 +38,7 @@ class AttackTables {
     static U64 generateRookAttacks(Types::Square sq, U64 blocks);
     U64 getRookAttacks(Types::Square sq, U64 occ);
     U64 getBishopAttacks(Types::Square sq, U64 occ);
+    U64 getQueenAttacks(Types::Square sq, U64 occ);
     static U64 setOccupancies(int index, int bits_in_mask, U64 attack_mask);
     static U64 findMagics(Types::Square sq, int relevant_bits, bool bishop);
 };
