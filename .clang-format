@@ -8,6 +8,7 @@ AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortFunctionsOnASingleLine: None
 ColumnLimit: 80
 IndentWidth: 4
+AlwaysBreakTemplateDeclarations: true
 SortIncludes: false
 BreakConstructorInitializers: BeforeComma
 NamespaceIndentation: All
