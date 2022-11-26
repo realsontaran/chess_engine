@@ -41,6 +41,8 @@ namespace Types {
 
     enum Side { white, black, both };
 
+    enum Piece { P, N, B, R, Q, K, p, n, b, r, q, k };
+
     template<typename E> E &operator++(E &e) {
         e = static_cast<E>(static_cast<int>(e) + 1);
         return e;

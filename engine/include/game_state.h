@@ -12,6 +12,8 @@ class GameState {
     void printAsciiBoard();
     void parseFEN(std::string const &fenStr);
 
+    U64 pieceBoards[12] = {0ULL}; // All pieces
+    U64 occupancies[3] = {0ULL};  // Black, white and all
   private:
     enum Castle { wk = 1, wq = 2, bk = 4, bq = 8 };
 
@@ -22,8 +24,6 @@ class GameState {
     int en_passant = Types::Square::no_sq;
     int castle = 0; // Castling Rights
 
-    U64 pieceBoards[12] = {0ULL}; // All pieces
-    U64 occupancies[3] = {0ULL};  // Black, white and all
     static int getPieceIdFromChar(char c);
 };
 

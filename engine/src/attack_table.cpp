@@ -437,3 +437,42 @@ void AttackTables::initAll() {
     initSliders(true);  // Bishop
     initSliders(false); // Rook
 }
+
+bool AttackTables::isSquareAttacked(Types::Square sq, Types::Side side,
+                                    GameState &state) {
+    if ((side == Types::white) && ((arrPawnAttacks[Types::black][sq] &
+                                    state.pieceBoards[Types::P]) != 0ULL)) {
+        return true;
+    }
+    if ((side == Types::black) && ((arrPawnAttacks[Types::white][sq] &
+                                    state.pieceBoards[Types::p]) != 0ULL)) {
+        return true;
+    }
+    if ((arrKnightAttacks[sq] &
+         ((side == Types::white) ? state.pieceBoards[Types::N]
+                                 : state.pieceBoards[Types::n])) != 0ULL) {
+        return true;
+    }
+    if ((getBishopAttacks(sq, state.occupancies[Types::both]) &
+         ((side == Types::white) ? state.pieceBoards[Types::B]
+                                 : state.pieceBoards[Types::b])) != 0ULL) {
+        return true;
+    }
+    if ((getRookAttacks(sq, state.occupancies[Types::both]) &
+         ((side == Types::white) ? state.pieceBoards[Types::R]
+                                 : state.pieceBoards[Types::r])) != 0ULL) {
+        return true;
+    }
+    if ((getQueenAttacks(sq, state.occupancies[Types::both]) &
+         ((side == Types::white) ? state.pieceBoards[Types::Q]
+                                 : state.pieceBoards[Types::q])) != 0ULL) {
+        return true;
+    }
+    if ((arrKingAttacks[sq] &
+         ((side == Types::white) ? state.pieceBoards[Types::K]
+                                 : state.pieceBoards[Types::k])) != 0ULL) {
+        return true;
+    }
+
+    return false;
+}

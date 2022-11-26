@@ -2,6 +2,7 @@
 #define ATTACK_TABLE_H_
 
 #include <bitboard.h>
+#include <game_state.h>
 #include <types.h>
 #include <prng.h>
 
@@ -15,6 +16,7 @@ class AttackTables {
     U64 arrKingAttacks[64];
     U64 arrRookAttacks[64][4096];
     U64 arrBishopAttacks[64][512];
+    bool isSquareAttacked(Types::Square sq, Types::Side side, GameState &state);
 
   private:
     const static int bishopRelevants[];
