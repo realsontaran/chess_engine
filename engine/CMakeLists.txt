@@ -3,6 +3,7 @@ set(ENGINE_SRC
   "src/attack_table.cpp"
   "src/prng.cpp"
   "src/game_state.cpp"
+  "src/moves.cpp"
  )
 
 add_library (
