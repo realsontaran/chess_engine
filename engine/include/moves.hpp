@@ -20,8 +20,18 @@ class Move {
     AttackTables attackTable;
     GameState state;
 
-    U64 whitePawnAbleToPush();
-    U64 whitePawnAbleToDblPush();
+    void generatePawnMoves(Types::Side side);
+    U64 wSinglePushPawns();
+    U64 wDblPushPawns();
+    U64 wPawnsAble2Push();
+    U64 wPawnsAble2DblPush();
+
+    U64 bSinglePushPawns();
+    U64 bDblPushPawns();
+    U64 bPawnsAble2Push();
+    U64 bPawnsAble2DblPush();
+
+    bool static isPromotionSquare(Types::Side side, Types::Square srcSq);
 };
 
 #endif // MOVES_H_

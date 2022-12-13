@@ -44,13 +44,15 @@ int main(int argc, char *argv[]) {
         "rnbqkb1r/pp1p1pPp/8/2p1pP2/1P1P4/3P3P/P1P1P3/RNBQKBNR w KQkq e6 0 1";
     std::string cmk_position =
         "r2q1rk1/ppp2ppp/2n1bn2/2b1p3/3pP3/3P1NPP/PPP1NPB1/R1BQ1RK1 b - - 0 9 ";
-    state.parseFEN(start_position);
-    printf("FEN: %s\n", start_position.c_str());
+
+    std::string test("r3k2r/p2pqpb1/bn2pnp1/2pPN3/1p2P3/2N2Q1p/PPPBBPpP/R3K2R w KQkq c6 0 2");
+    state.parseFEN(test);
+    printf("FEN: %s\n", test.c_str());
     state.printAsciiBoard();
 
     AttackTables attack_table;
-    // Move move(state);
-    // move.generateMoves();
+    Move move(state);
+    move.generateMoves();
     // U64 occupancy = 0ULL;
 
     // print_attacked_squares(Types::white, attack_table, state);
