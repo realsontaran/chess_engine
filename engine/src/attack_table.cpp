@@ -1,4 +1,4 @@
-#include <attack_table.h>
+#include <attack_table.hpp>
 #include <cstdio>
 #include <cstring>
 

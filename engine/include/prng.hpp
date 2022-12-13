@@ -1,6 +1,6 @@
 #ifndef PRNG_H_
 #define PRNG_H_
-#include <bitboard.h>
+#include <bitboard.hpp>
 
 // https://en.wikipedia.org/wiki/Xorshift#Example_implementation
 unsigned int get_random_U32();

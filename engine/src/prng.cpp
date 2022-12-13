@@ -1,4 +1,4 @@
-#include <prng.h>
+#include <prng.hpp>
 
 // https://www.chessprogramming.org/Looking_for_Magics#Feeding_in_Randoms
 

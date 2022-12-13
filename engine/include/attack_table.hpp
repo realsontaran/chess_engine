@@ -1,10 +1,10 @@
 #ifndef ATTACK_TABLE_H_
 #define ATTACK_TABLE_H_
 
-#include <bitboard.h>
-#include <game_state.h>
-#include <types.h>
-#include <prng.h>
+#include <bitboard.hpp>
+#include <game_state.hpp>
+#include <types.hpp>
+#include <prng.hpp>
 
 class AttackTables {
   public:

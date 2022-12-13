@@ -2,7 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <game_state.h>
+#include <game_state.hpp>
 
 using namespace Bitboard;
 

@@ -1,8 +1,8 @@
 #ifndef GAME_STATE_H_
 #define GAME_STATE_H_
 
-#include <bitboard.h>
-#include <types.h>
+#include <bitboard.hpp>
+#include <types.hpp>
 #include <sstream>
 
 class GameState {
