@@ -5,19 +5,19 @@
 #include <attack_table.hpp>
 #include <game_state.hpp>
 
-class Move {
+class MoveGeneration {
   public:
-    Move(GameState const &s)
+    MoveGeneration(GameState const &s)
         : state(s) {
-        attackTable = AttackTables();
+        attackTable = AttackTable();
     }
 
-    virtual ~Move();
+    virtual ~MoveGeneration();
 
     void generateMoves();
 
   private:
-    AttackTables attackTable;
+    AttackTable attackTable;
     GameState state;
 
     void generatePawnMoves(Types::Side side);

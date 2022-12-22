@@ -73,7 +73,7 @@ void Bitboard::printBoard(U64 board) {
             if (file == 0) {
                 printf("  %d ", 8 - rank);
             }
-            printf("%s", get_bit(board, square) != 0U ? "[#]" : "[ ]");
+            printf("%s", getBit(board, square) != 0U ? "[#]" : "[ ]");
         }
         printf("\n");
     }

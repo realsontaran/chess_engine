@@ -3,7 +3,7 @@
 #include <bitboard.hpp>
 
 // https://en.wikipedia.org/wiki/Xorshift#Example_implementation
-unsigned int get_random_U32();
-U64 get_random_U64();
-U64 generate_magic_number();
+unsigned int getRandomU32();
+U64 getRandomU64();
+U64 generatMagicNumber();
 #endif // PRNG_H_

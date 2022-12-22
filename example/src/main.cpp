@@ -6,7 +6,7 @@
 using namespace Types;
 using namespace Bitboard;
 
-void print_attacked_squares(Side side, AttackTables &table, GameState &state) {
+void print_attacked_squares(Side side, AttackTable &table, GameState &state) {
     printf("\n");
 
     // loop over board ranks
@@ -48,10 +48,10 @@ int main(int argc, char *argv[]) {
     std::string test("r3k2r/p2pqpb1/bn2pnp1/2pPN3/1p2P3/2N2Q1p/PPPBBPpP/R3K2R w KQkq c6 0 2");
     state.parseFEN(test);
     printf("FEN: %s\n", test.c_str());
-    state.printAsciiBoard();
+    state.printUnicodeBoard();
 
-    AttackTables attack_table;
-    Move move(state);
+    AttackTable attack_table;
+    MoveGeneration move(state);
     move.generateMoves();
     // U64 occupancy = 0ULL;
 

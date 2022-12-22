@@ -4,27 +4,27 @@
 typedef unsigned long long U64;
 
 namespace Bitboard {
-    constexpr void set_bit(U64 &board, int sq) {
+    constexpr void setBit(U64 &board, int sq) {
         (board) |= (1ULL << (sq));
     }
 
-    constexpr U64 get_bit(U64 board, int sq) {
+    constexpr U64 getBit(U64 board, int sq) {
         return (board) & (1ULL << (sq));
     }
 
-    constexpr void pop_bit(U64 &board, int sq) {
+    constexpr void popBit(U64 &board, int sq) {
         (board) &= ~(1ULL << (sq));
     }
 
-    constexpr unsigned int bit_count(U64 board) {
+    constexpr unsigned int getBitCount(U64 board) {
         unsigned int count = 0;
         for (count = 0; board != 0ULL; ++count, board &= board - 1)
             ;
         return count;
     }
 
-    constexpr unsigned int get_lsb(U64 board) {
-        return (board != 0ULL) ? bit_count((board & -board) - 1) : 0;
+    constexpr unsigned int getLSB(U64 board) {
+        return (board != 0ULL) ? getBitCount((board & -board) - 1) : 0;
     }
 
     /* Magic numbers for excluding files for attack mask generation */

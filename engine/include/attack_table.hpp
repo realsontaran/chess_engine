@@ -6,16 +6,16 @@
 #include <types.hpp>
 #include <prng.hpp>
 
-class AttackTables {
+class AttackTable {
   public:
-    AttackTables();
-    virtual ~AttackTables();
+    AttackTable();
+    virtual ~AttackTable();
 
-    U64 arrPawnAttacks[2][64];
-    U64 arrKnightAttacks[64];
-    U64 arrKingAttacks[64];
-    U64 arrRookAttacks[64][4096];
-    U64 arrBishopAttacks[64][512];
+    U64 pawnAttacks[2][64];
+    U64 knightAttacks[64];
+    U64 kingAttacks[64];
+    U64 rookAttacks[64][4096];
+    U64 bishopAttacks[64][512];
     bool isSquareAttacked(Types::Square sq, Types::Side side, GameState &state);
 
   private:
