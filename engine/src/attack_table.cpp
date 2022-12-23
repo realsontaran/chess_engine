@@ -306,7 +306,7 @@ U64 AttackTable::findMagics(Types::Square sq, int relevant_bits, bool bishop) {
 
         // skip inappropriate magic numbers
         if (Bitboard::getBitCount((attack_mask * magic_number) &
-                                0xFF00000000000000) < 6)
+                                  0xFF00000000000000) < 6)
             continue;
 
         // init used attacks
@@ -439,7 +439,7 @@ void AttackTable::initAll() {
 }
 
 bool AttackTable::isSquareAttacked(Types::Square sq, Types::Side side,
-                                    GameState &state) {
+                                   GameState &state) {
     if ((side == Types::white) && ((pawnAttacks[Types::black][sq] &
                                     state.piecePositions[Types::P]) != 0ULL)) {
         return true;

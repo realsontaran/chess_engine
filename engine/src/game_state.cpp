@@ -61,11 +61,13 @@ void GameState::printUnicodeBoard() {
     }
     printf("     a  b  c  d  e  f  g  h\n");
     printf("     Side:     %s\n", sideToMove == 0 ? "white" : "black");
-    printf("     En_passant:   %s\n", (enPassantSquare != Types::no_sq)
-                                          ? Types::squareToString(enPassantSquare)
-                                          : "no");
+    printf("     En_passant:   %s\n",
+           (enPassantSquare != Types::no_sq)
+               ? Types::squareToString(enPassantSquare)
+               : "no");
     printf("     Castling:  %c%c%c%c\n\n", (castleRights & wk) != 0 ? 'K' : '-',
-           (castleRights & wq) != 0 ? 'Q' : '-', (castleRights & bk) != 0 ? 'k' : '-',
+           (castleRights & wq) != 0 ? 'Q' : '-',
+           (castleRights & bk) != 0 ? 'k' : '-',
            (castleRights & bq) != 0 ? 'q' : '-');
 }
 
