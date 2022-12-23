@@ -31,6 +31,7 @@ class MoveGeneration {
     U64 bPawnsAble2Push();
     U64 bPawnsAble2DblPush();
 
+    void generateCastles(Types::Side side);
     bool static isPromotionSquare(Types::Side side, Types::Square srcSq);
 };
 

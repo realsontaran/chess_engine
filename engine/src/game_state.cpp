@@ -5,6 +5,7 @@
 #include <game_state.hpp>
 
 using namespace Bitboard;
+using namespace Types;
 
 GameState::GameState() {
 }

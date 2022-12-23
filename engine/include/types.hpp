@@ -55,6 +55,8 @@ namespace Types {
 
     enum Side { white, black, both };
 
+    enum Castle { wk = 1, wq = 2, bk = 4, bq = 8 };
+
     enum Piece { P, N, B, R, Q, K, p, n, b, r, q, k };
 
     template<typename E>

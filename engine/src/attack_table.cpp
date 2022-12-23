@@ -438,6 +438,7 @@ void AttackTable::initAll() {
     initSliders(false); // Rook
 }
 
+// Is given square attacked by given side
 bool AttackTable::isSquareAttacked(Types::Square sq, Types::Side side,
                                    GameState &state) {
     if ((side == Types::white) && ((pawnAttacks[Types::black][sq] &

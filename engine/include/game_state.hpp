@@ -19,8 +19,6 @@ class GameState {
     int sideToMove = -1;  // Side to move
     int castleRights = 0; // Castling Rights
   private:
-    enum Castle { wk = 1, wq = 2, bk = 4, bq = 8 };
-
     enum AsciiPieces { P, N, B, R, Q, K, p, n, b, r, q, k };
 
     std::string unicodePieces[12] = {"\u2659", "\u2658", "\u2657", "\u2656",

@@ -1,7 +1,7 @@
 #include <moves.hpp>
 
 void MoveGeneration::generateMoves() {
-    generatePawnMoves(static_cast<Types::Side>(state.sideToMove));
+    generateCastles(static_cast<Types::Side>(state.sideToMove));
 }
 
 bool MoveGeneration::isPromotionSquare(Types::Side side, Types::Square srcSq) {
@@ -9,6 +9,56 @@ bool MoveGeneration::isPromotionSquare(Types::Side side, Types::Square srcSq) {
         return srcSq >= Types::a7 && srcSq <= Types::h7;
     }
     return srcSq >= Types::a2 && srcSq <= Types::h2;
+}
+
+void MoveGeneration::generateCastles(Types::Side side) {
+
+    U64 board = state.occupancies[Types::both];
+    // Check if white kingside castle is legal
+    if (side == Types::white && (state.castleRights & Types::Castle::wk) != 0) {
+        bool clearPath = (Bitboard::getBit(board, Types::f1) == 0ULL) &&
+                         (Bitboard::getBit(board, Types::g1) == 0ULL);
+        if (clearPath &&
+            !attackTable.isSquareAttacked(Types::e1, Types::black, state) &&
+            !attackTable.isSquareAttacked(Types::f1, Types::black, state)) {
+            printf("castling move: e1g1\n");
+        }
+    }
+    // Check if white queenside castle is legal
+    if (side == Types::white && (state.castleRights & Types::Castle::wq) != 0) {
+        bool clearPath = (Bitboard::getBit(board, Types::d1) == 0ULL) &&
+                         (Bitboard::getBit(board, Types::c1) == 0ULL) &&
+                         (Bitboard::getBit(board, Types::b1) == 0ULL);
+
+        if (clearPath &&
+            !attackTable.isSquareAttacked(Types::e1, Types::black, state) &&
+            !attackTable.isSquareAttacked(Types::d1, Types::black, state)) {
+            printf("castling move: e1c1\n");
+        }
+    }
+    // Check if black kingside castle is legal
+    if (side == Types::black && (state.castleRights & Types::Castle::bk) != 0) {
+        bool clearPath = (Bitboard::getBit(board, Types::f8) == 0ULL) &&
+                         (Bitboard::getBit(board, Types::g8) == 0ULL);
+
+        if (clearPath &&
+            !attackTable.isSquareAttacked(Types::e8, Types::white, state) &&
+            !attackTable.isSquareAttacked(Types::f8, Types::white, state)) {
+            printf("castling move: e8g8\n");
+        }
+    }
+    // Check if black queenside castle is legal
+    if (side == Types::black && (state.castleRights & Types::Castle::bq) != 0) {
+        bool clearPath = (Bitboard::getBit(board, Types::d8) == 0ULL) &&
+                         (Bitboard::getBit(board, Types::c8) == 0ULL) &&
+                         (Bitboard::getBit(board, Types::b8) == 0ULL);
+
+        if (clearPath &&
+            !attackTable.isSquareAttacked(Types::e8, Types::white, state) &&
+            !attackTable.isSquareAttacked(Types::d8, Types::white, state)) {
+            printf("castling move: e8c8\n");
+        }
+    }
 }
 
 void MoveGeneration::generatePawnMoves(Types::Side side) {
