@@ -35,6 +35,7 @@ class MoveGeneration {
     void generateCastles(Types::Side side);
     void generateKnightMoves(Types::Side side);
     void generateBishopMoves(Types::Side side);
+    void generateRookMoves(Types::Side side);
 };
 
 #endif // MOVES_H_
