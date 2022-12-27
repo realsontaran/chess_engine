@@ -3,7 +3,7 @@
 using namespace Types;
 
 void MoveGeneration::generateMoves() {
-    generateSliderAndLeaperMoves(Piece::N, static_cast<Side>(state.sideToMove));
+    generateSliderAndLeaperMoves(Piece::Q, static_cast<Side>(state.sideToMove));
 }
 
 bool MoveGeneration::isPromotionSquare(Side side, Square srcSq) {
@@ -60,36 +60,43 @@ void MoveGeneration::generateCastles(Side side) {
 }
 
 void MoveGeneration::generateSliderAndLeaperMoves(Piece pieceType, Side side) {
-    U64 bitboard =
-        (side == white) ? state.piecePositions[N] : state.piecePositions[n];
+    U64 bitboard = state.piecePositions[pieceType];
     U64 occupancies = state.occupancies[side];
     U64 occupanciesOther =
         (side == white) ? state.occupancies[black] : state.occupancies[white];
     U64 attacks = 0ULL;
     int srcSq = no_sq;
     int dstSq = no_sq;
-    int pieceNum = pieceType % 6;
 
     while (bitboard != 0ULL) {
         srcSq = static_cast<int>(Bitboard::getLSB(bitboard));
-        switch (pieceNum) {
-        case 1:
+        switch (pieceType) {
+        case N:
+        case n:
             attacks = attackTable.knightAttacks[srcSq] & ~occupancies;
             break;
-        case 2:
+        case B:
+        case b:
             attacks = attackTable.getBishopAttacks(static_cast<Square>(srcSq),
                                                    state.occupancies[both]) &
                       ~occupancies;
             break;
-        case 3:
+        case R:
+        case r:
             attacks = attackTable.getRookAttacks(static_cast<Square>(srcSq),
                                                  state.occupancies[both]) &
                       ~occupancies;
             break;
+        case Q:
+        case q:
+            attacks = attackTable.getQueenAttacks(static_cast<Square>(srcSq),
+                                                  state.occupancies[both]) &
+                      ~occupancies;
+
+            break;
         default:
             break;
         }
-
         while (attacks != 0ULL) {
             dstSq = static_cast<int>(Bitboard::getLSB(attacks));
             if (Bitboard::getBit(occupanciesOther, dstSq) == 0ULL) {

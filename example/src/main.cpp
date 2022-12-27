@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
         "r2q1rk1/ppp2ppp/2n1bn2/2b1p3/3pP3/3P1NPP/PPP1NPB1/R1BQ1RK1 b - - 0 9 ";
 
     std::string test("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R "
-                     "b KQkq - 0 1 ");
+                     "w KQkq - 0 1 ");
     state.parseFEN(test);
     printf("FEN: %s\n", test.c_str());
     state.printUnicodeBoard();
