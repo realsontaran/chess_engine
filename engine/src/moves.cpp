@@ -3,7 +3,14 @@
 using namespace Types;
 
 void MoveGeneration::generateMoves() {
-    generateSliderAndLeaperMoves(Piece::k, static_cast<Side>(state.sideToMove));
+    Side side = static_cast<Side>(state.sideToMove);
+    generatePawnMoves(side);
+    generateCastles(side);
+    generateSliderAndLeaperMoves(Piece::N, side);
+    generateSliderAndLeaperMoves(Piece::B, side);
+    generateSliderAndLeaperMoves(Piece::R, side);
+    generateSliderAndLeaperMoves(Piece::Q, side);
+    generateSliderAndLeaperMoves(Piece::K, side);
 }
 
 bool MoveGeneration::isPromotionSquare(Side side, Square srcSq) {
