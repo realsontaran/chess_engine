@@ -14,9 +14,10 @@ class AttackTable {
     U64 pawnAttacks[2][64];
     U64 knightAttacks[64];
     U64 kingAttacks[64];
-    U64 rookAttacks[64][4096];
-    U64 bishopAttacks[64][512];
     bool isSquareAttacked(Types::Square sq, Types::Side side, GameState &state);
+    U64 getRookAttacks(Types::Square sq, U64 occ);
+    U64 getBishopAttacks(Types::Square sq, U64 occ);
+    U64 getQueenAttacks(Types::Square sq, U64 occ);
 
   private:
     const static int bishopRelevants[];
@@ -26,6 +27,9 @@ class AttackTable {
 
     U64 bishopMasks[64];
     U64 rookMasks[64];
+
+    U64 rookAttacks[64][4096];
+    U64 bishopAttacks[64][512];
 
     void initAll();
     void initLeapers();
@@ -38,9 +42,6 @@ class AttackTable {
     static U64 rookAttackMask(Types::Square sq);
     static U64 generateBishopAttacks(Types::Square sq, U64 blocks);
     static U64 generateRookAttacks(Types::Square sq, U64 blocks);
-    U64 getRookAttacks(Types::Square sq, U64 occ);
-    U64 getBishopAttacks(Types::Square sq, U64 occ);
-    U64 getQueenAttacks(Types::Square sq, U64 occ);
     static U64 setOccupancies(int index, int bits_in_mask, U64 attack_mask);
     static U64 findMagics(Types::Square sq, int relevant_bits, bool bishop);
 };

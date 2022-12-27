@@ -30,10 +30,11 @@ class MoveGeneration {
     U64 bDblPushPawns();
     U64 bPawnsAble2Push();
     U64 bPawnsAble2DblPush();
+    bool static isPromotionSquare(Types::Side side, Types::Square srcSq);
 
     void generateCastles(Types::Side side);
-    bool static isPromotionSquare(Types::Side side, Types::Square srcSq);
     void generateKnightMoves(Types::Side side);
+    void generateBishopMoves(Types::Side side);
 };
 
 #endif // MOVES_H_

@@ -3,7 +3,7 @@
 using namespace Types;
 
 void MoveGeneration::generateMoves() {
-    generateKnightMoves(static_cast<Side>(state.sideToMove));
+    generateBishopMoves(static_cast<Side>(state.sideToMove));
 }
 
 bool MoveGeneration::isPromotionSquare(Side side, Square srcSq) {
@@ -72,6 +72,37 @@ void MoveGeneration::generateKnightMoves(Side side) {
     while (bitboard != 0ULL) {
         srcSq = static_cast<int>(Bitboard::getLSB(bitboard));
         attacks = attackTable.knightAttacks[srcSq] & ~occupancies;
+        while (attacks != 0ULL) {
+            dstSq = static_cast<int>(Bitboard::getLSB(attacks));
+            if (Bitboard::getBit(occupanciesOther, dstSq) == 0ULL) {
+                printf("%s%s piece quiet move\n", squareToString(srcSq),
+                       squareToString(dstSq));
+            } else {
+                printf("%s%s piece capture\n", squareToString(srcSq),
+                       squareToString(dstSq));
+            }
+            Bitboard::popBit(attacks, dstSq);
+        }
+        Bitboard::popBit(bitboard, srcSq);
+    }
+}
+
+void MoveGeneration::generateBishopMoves(Side side) {
+    U64 bitboard =
+        (side == white) ? state.piecePositions[B] : state.piecePositions[b];
+    U64 occupancies =
+        (side == white) ? state.occupancies[white] : state.occupancies[black];
+    U64 occupanciesOther =
+        (side == white) ? state.occupancies[black] : state.occupancies[white];
+    U64 attacks = 0ULL;
+    int srcSq = no_sq;
+    int dstSq = no_sq;
+    while (bitboard != 0ULL) {
+        srcSq = static_cast<int>(Bitboard::getLSB(bitboard));
+        attacks = attackTable.getBishopAttacks(static_cast<Square>(srcSq),
+                                               state.occupancies[both]) &
+                  ~occupancies;
+
         while (attacks != 0ULL) {
             dstSq = static_cast<int>(Bitboard::getLSB(attacks));
             if (Bitboard::getBit(occupanciesOther, dstSq) == 0ULL) {
