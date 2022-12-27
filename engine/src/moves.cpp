@@ -3,7 +3,7 @@
 using namespace Types;
 
 void MoveGeneration::generateMoves() {
-    generateSliderAndLeaperMoves(Piece::Q, static_cast<Side>(state.sideToMove));
+    generateSliderAndLeaperMoves(Piece::q, static_cast<Side>(state.sideToMove));
 }
 
 bool MoveGeneration::isPromotionSquare(Side side, Square srcSq) {
@@ -60,7 +60,11 @@ void MoveGeneration::generateCastles(Side side) {
 }
 
 void MoveGeneration::generateSliderAndLeaperMoves(Piece pieceType, Side side) {
-    U64 bitboard = state.piecePositions[pieceType];
+    int pieceNum = pieceType % 6;
+    if (side == black) {
+        pieceNum += 6;
+    }
+    U64 bitboard = state.piecePositions[pieceNum];
     U64 occupancies = state.occupancies[side];
     U64 occupanciesOther =
         (side == white) ? state.occupancies[black] : state.occupancies[white];
