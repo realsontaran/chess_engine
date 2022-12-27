@@ -3,7 +3,7 @@
 using namespace Types;
 
 void MoveGeneration::generateMoves() {
-    generateSliderAndLeaperMoves(Piece::q, static_cast<Side>(state.sideToMove));
+    generateSliderAndLeaperMoves(Piece::k, static_cast<Side>(state.sideToMove));
 }
 
 bool MoveGeneration::isPromotionSquare(Side side, Square srcSq) {
@@ -96,7 +96,10 @@ void MoveGeneration::generateSliderAndLeaperMoves(Piece pieceType, Side side) {
             attacks = attackTable.getQueenAttacks(static_cast<Square>(srcSq),
                                                   state.occupancies[both]) &
                       ~occupancies;
-
+            break;
+        case K:
+        case k:
+            attacks = attackTable.kingAttacks[srcSq] & ~occupancies;
             break;
         default:
             break;
