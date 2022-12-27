@@ -33,6 +33,7 @@ class MoveGeneration {
 
     void generateCastles(Types::Side side);
     bool static isPromotionSquare(Types::Side side, Types::Square srcSq);
+    void generateKnightMoves(Types::Side side);
 };
 
 #endif // MOVES_H_
