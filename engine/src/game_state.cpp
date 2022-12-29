@@ -43,23 +43,25 @@ int GameState::getPieceIdFromChar(char c) {
     return -1;
 }
 
-void GameState::printUnicodeBoard() {
+void GameState::printBoard(bool unicode) {
     // clang-format on
     for (int rank = 0; rank < 8; ++rank) {
+        printf("  %d ", 8 - rank);
         for (int file = 0; file < 8; ++file) {
             int square = rank * 8 + file;
-            if (file == 0) {
-                printf("  %d ", 8 - rank);
+            std::string pieceStr = ".";
+            for (int bb_piece = P; bb_piece <= k; ++bb_piece) {
+                if (getBit(piecePositions[bb_piece], square) != 0U) {
+                    pieceStr = unicode ? unicodePieces[bb_piece]
+                                       : std::string(1, asciiPieces[bb_piece]);
+                    break;
+                }
             }
-            int piece = -1;
-            for (int bb_piece = P; bb_piece <= k; bb_piece++) {
-                if (Bitboard::getBit(piecePositions[bb_piece], square) != 0ULL)
-                    piece = bb_piece;
-            }
-            printf(" %s ", (piece == -1) ? "." : unicodePieces[piece].c_str());
+            printf(" %s ", pieceStr.c_str());
         }
         printf("\n");
     }
+
     printf("     a  b  c  d  e  f  g  h\n");
     printf("     Side:     %s\n", sideToMove == 0 ? "white" : "black");
     printf("     En_passant:   %s\n",

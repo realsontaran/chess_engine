@@ -10,7 +10,7 @@ class GameState {
     GameState();
     virtual ~GameState();
 
-    void printUnicodeBoard();
+    void printBoard(bool unicode);
     void parseFEN(std::string const &fenStr);
 
     U64 piecePositions[12] = {0ULL}; // All pieces
