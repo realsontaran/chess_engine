@@ -1,6 +1,7 @@
 #ifndef ENCODING_H_
 #define ENCODING_H_
 
+#include <string>
 #include <types.hpp>
 using namespace Types;
 
@@ -62,6 +63,19 @@ class Move {
 
     bool getCastling() const {
         return (move & 0x800000) != 0;
+    }
+
+    std::string toString() const {
+        return std::string(squareToString(getSrc())) + " " +
+               std::string(squareToString(getDst())) + " " +
+               pieceToString(getPiece()) + " " +
+               ((getPromoted() == Piece::P || getPromoted() == Piece::p)
+                    ? std::string(" ")
+                    : std::string(1, pieceToString(getPromoted()))) +
+               " " + std::to_string(static_cast<int>(getCapture())) + " " +
+               std::to_string(static_cast<int>(getDblPush())) + " " +
+               std::to_string(static_cast<int>(getEnPassant())) + " " +
+               std::to_string(static_cast<int>(getCastling()));
     }
 
   protected:

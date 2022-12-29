@@ -53,6 +53,12 @@ namespace Types {
         return nullptr;
     }
 
+    inline char pieceToString(int piece) {
+        static char const pieceStrings[] = {'P', 'N', 'B', 'R', 'Q', 'K',
+                                            'p', 'n', 'b', 'r', 'q', 'k'};
+        return pieceStrings[piece];
+    }
+
     enum Side { white, black, both };
 
     enum Castle { wk = 1, wq = 2, bk = 4, bq = 8 };
