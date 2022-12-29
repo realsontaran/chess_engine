@@ -4,11 +4,14 @@
 #include <bitboard.hpp>
 #include <attack_table.hpp>
 #include <game_state.hpp>
+#include <move_list.hpp>
+#include <encoding.hpp>
 
 class MoveGeneration {
   public:
-    MoveGeneration(GameState const &s)
-        : state(s) {
+    MoveGeneration(GameState const &s, MoveList *moveList)
+        : state(s)
+        , moves(moveList) {
         attackTable = AttackTable();
     }
 
@@ -19,6 +22,7 @@ class MoveGeneration {
   private:
     AttackTable attackTable;
     GameState state;
+    MoveList *moves;
 
     void generatePawnMoves(Types::Side side);
     U64 wSinglePushPawns();
