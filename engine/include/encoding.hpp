@@ -48,20 +48,20 @@ class Move {
         return static_cast<Piece>((move & 0xf0000) >> 16);
     }
 
-    unsigned int getCapture() const {
-        return move & 0x100000;
+    bool getCapture() const {
+        return (move & 0x100000) != 0;
     }
 
-    unsigned int getDblPush() const {
-        return move & 0x200000;
+    bool getDblPush() const {
+        return (move & 0x200000) != 0;
     }
 
-    unsigned int getEnPassant() const {
-        return move & 0x400000;
+    bool getEnPassant() const {
+        return (move & 0x400000) != 0;
     }
 
-    unsigned int getCastling() const {
-        return move & 0x800000;
+    bool getCastling() const {
+        return (move & 0x800000) != 0;
     }
 
   protected:
