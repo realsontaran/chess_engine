@@ -1,5 +1,5 @@
-#ifndef MOVES_H_
-#define MOVES_H_
+#ifndef MOVE_GENERATION_H_
+#define MOVE_GENERATION_H_
 
 #include <bitboard.hpp>
 #include <attack_table.hpp>
@@ -40,4 +40,4 @@ class MoveGeneration {
     void generateSliderAndLeaperMoves(Types::Piece pieceType, Types::Side side);
 };
 
-#endif // MOVES_H_
+#endif // MOVE_GENERATION_H_

@@ -132,7 +132,9 @@ void MoveGeneration::generateSliderAndLeaperMoves(Piece pieceType, Side side) {
 void MoveGeneration::generatePawnMoves(Side side) {
     int srcSq;
     int dstSq;
+    int srcAttackSq;
     U64 srcBB;
+    U64 srcAttackBB;
     U64 dstBB;
     U64 srcDBB;
     U64 dstDBB;
@@ -145,6 +147,7 @@ void MoveGeneration::generatePawnMoves(Side side) {
         dstBB = wSinglePushPawns();
         srcDBB = wPawnsAble2DblPush();
         dstDBB = wDblPushPawns();
+        srcAttackBB = state.piecePositions[P];
         promotion = "QRBN";
         pawn = Piece::P;
     } else {
@@ -152,6 +155,7 @@ void MoveGeneration::generatePawnMoves(Side side) {
         dstBB = bSinglePushPawns();
         srcDBB = bPawnsAble2DblPush();
         dstDBB = bDblPushPawns();
+        srcAttackBB = state.piecePositions[p];
         promotion = "qrbn";
         pawn = Piece::p;
         promoPiece[0] = q;
@@ -164,6 +168,7 @@ void MoveGeneration::generatePawnMoves(Side side) {
         srcSq = static_cast<int>(Bitboard::getLSB(srcBB));
         dstSq = static_cast<int>(Bitboard::getLSB(dstBB));
         if (isPromotionSquare(side, static_cast<Square>(srcSq))) {
+            // Promote pawns
             moves->add(Move(static_cast<Square>(srcSq),
                             static_cast<Square>(dstSq), pawn, promoPiece[0], 0,
                             0, 0, 0));
@@ -177,6 +182,7 @@ void MoveGeneration::generatePawnMoves(Side side) {
                             static_cast<Square>(dstSq), pawn, promoPiece[3], 0,
                             0, 0, 0));
         } else {
+            // Double push pawns
             while ((srcDBB != 0ULL)) {
                 int srcSqD = static_cast<int>(Bitboard::getLSB(srcDBB));
                 int dstSqD = static_cast<int>(Bitboard::getLSB(dstDBB));
@@ -187,38 +193,11 @@ void MoveGeneration::generatePawnMoves(Side side) {
                 Bitboard::popBit(srcDBB, srcSqD);
                 Bitboard::popBit(dstDBB, dstSqD);
             }
+            // Single push pawns
             moves->add(Move(static_cast<Square>(srcSq),
                             static_cast<Square>(dstSq), pawn, Piece::P, 0, 0, 0,
                             0));
         }
-        Side other = (side == white) ? black : white;
-        U64 pawnAttacks =
-            attackTable.pawnAttacks[side][srcSq] & state.occupancies[other];
-        while (pawnAttacks != 0ULL) {
-            int dstSqA = static_cast<int>(Bitboard::getLSB(pawnAttacks));
-            if (isPromotionSquare(side, static_cast<Square>(srcSq))) {
-                moves->add(Move(static_cast<Square>(srcSq),
-                                static_cast<Square>(dstSqA), pawn,
-                                promoPiece[0], 1, 0, 0, 0));
-                moves->add(Move(static_cast<Square>(srcSq),
-                                static_cast<Square>(dstSqA), pawn,
-                                promoPiece[1], 1, 0, 0, 0));
-                moves->add(Move(static_cast<Square>(srcSq),
-                                static_cast<Square>(dstSqA), pawn,
-                                promoPiece[2], 1, 0, 0, 0));
-                moves->add(Move(static_cast<Square>(srcSq),
-                                static_cast<Square>(dstSqA), pawn,
-                                promoPiece[3], 1, 0, 0, 0));
-
-            } else {
-
-                moves->add(Move(static_cast<Square>(srcSq),
-                                static_cast<Square>(dstSqA), pawn, Piece::P, 1,
-                                0, 0, 0));
-            }
-            Bitboard::popBit(pawnAttacks, dstSqA);
-        }
-
         if (state.enPassantSquare != no_sq) {
             U64 enPassantAttacks = attackTable.pawnAttacks[side][srcSq] &
                                    (1ULL << state.enPassantSquare);
@@ -233,6 +212,39 @@ void MoveGeneration::generatePawnMoves(Side side) {
 
         Bitboard::popBit(srcBB, srcSq);
         Bitboard::popBit(dstBB, dstSq);
+    }
+
+    Side other = (side == white) ? black : white;
+    while (srcAttackBB != 0ULL) {
+        srcAttackSq = static_cast<int>(Bitboard::getLSB(srcAttackBB));
+        U64 pawnAttacks = attackTable.pawnAttacks[side][srcAttackSq] &
+                          state.occupancies[other];
+        while (pawnAttacks != 0ULL) {
+            int dstSqA = static_cast<int>(Bitboard::getLSB(pawnAttacks));
+            if (isPromotionSquare(side, static_cast<Square>(srcAttackSq))) {
+                // Promotion capture
+                moves->add(Move(static_cast<Square>(srcAttackSq),
+                                static_cast<Square>(dstSqA), pawn,
+                                promoPiece[0], 1, 0, 0, 0));
+                moves->add(Move(static_cast<Square>(srcAttackSq),
+                                static_cast<Square>(dstSqA), pawn,
+                                promoPiece[1], 1, 0, 0, 0));
+                moves->add(Move(static_cast<Square>(srcAttackSq),
+                                static_cast<Square>(dstSqA), pawn,
+                                promoPiece[2], 1, 0, 0, 0));
+                moves->add(Move(static_cast<Square>(srcAttackSq),
+                                static_cast<Square>(dstSqA), pawn,
+                                promoPiece[3], 1, 0, 0, 0));
+
+            } else {
+                // Pawn captures
+                moves->add(Move(static_cast<Square>(srcAttackSq),
+                                static_cast<Square>(dstSqA), pawn, Piece::P, 1,
+                                0, 0, 0));
+            }
+            Bitboard::popBit(pawnAttacks, dstSqA);
+        }
+        Bitboard::popBit(srcAttackBB, srcAttackSq);
     }
 }
 
