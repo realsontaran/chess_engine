@@ -1,3 +1,4 @@
+#include "make_move.hpp"
 #include "move_list.hpp"
 #include <attack_table.hpp>
 #include <move_generation.hpp>
@@ -52,29 +53,27 @@ int main(int argc, char *argv[]) {
                      "w KQkq - 0 1 ");
     state.parseFEN(tricky_position);
     printf("FEN: %s\n", tricky_position.c_str());
-    state.printBoard(true);
 
     AttackTable attack_table;
 
     MoveList moves;
     MoveGeneration move(state, &moves);
+    MakeMove makeMove(state);
     move.generateMoves();
-    moves.print();
-    // U64 occupancy = 0ULL;
 
-    // print_attacked_squares(Types::white, attack_table, state);
-    // set_bit(occupancy, b6);
-    // set_bit(occupancy, d6);
-    // set_bit(occupancy, f6);
-    // set_bit(occupancy, b4);
-    // set_bit(occupancy, g4);
-    // set_bit(occupancy, c3);
-    // set_bit(occupancy, d3);
-    // set_bit(occupancy, e3);
+    for (auto const &m : moves.moves) {
+        std::cout << m.toString() << std::endl;
 
-    // Bitboard::printBoard(occupancy);
+        state.printBoard(true);
+        makeMove.copyBoard();
+        makeMove.makeIt(m, Types::all_moves);
 
-    // AttackTables table;
-    // Bitboard::printBoard(table.getQueenAttacks(d4, occupancy));
+        state.printBoard(true);
+
+        makeMove.takeBack();
+
+        (void)getchar();
+    }
+
     return 0;
 }

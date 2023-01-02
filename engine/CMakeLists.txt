@@ -4,6 +4,7 @@ set(ENGINE_SRC
   "src/prng.cpp"
   "src/game_state.cpp"
   "src/move_generation.cpp"
+  "src/make_move.cpp"
  )
 
 add_library (
