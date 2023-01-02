@@ -42,8 +42,8 @@ int main(int argc, char *argv[]) {
     std::string empty_board = "8/8/8/8/8/8/8/8 w - - ";
     std::string start_position =
         "rn1q1rk1/pp2bppp/4pn2/3p1b2/2pP1B2/2P1PN2/PP1NBPPP/R2Q1RK1 w - - 6 9";
-    std::string tricky_position =
-        "r3k2r/pPppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1 ";
+    std::string tricky_position = "r3k2r/pP1pqpb1/bn2pnp1/2pPN3/1p2P3/2N2Q1p/"
+                                  "PPPBBPPP/R3K2R w KQkq c6 0 1 ";
     std::string killer_position =
         "rnbqkb1r/pp1p1pPp/8/2p1pP2/1P1P4/3P3P/P1P1P3/RNBQKBNR w KQkq e6 0 1";
     std::string cmk_position =

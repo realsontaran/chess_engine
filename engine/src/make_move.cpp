@@ -4,15 +4,22 @@ MakeMove::~MakeMove() {
 }
 
 int MakeMove::makeIt(EncodedMove const &move, MoveType type) {
+    // castling rights update constants
+    int const castling_rights[64] = {
+        7,  15, 15, 15, 3,  15, 15, 11, 15, 15, 15, 15, 15, 15, 15, 15,
+        15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
+        15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
+        15, 15, 15, 15, 15, 15, 15, 15, 13, 15, 15, 15, 12, 15, 15, 14};
+
     if (type == MoveType::all_moves) {
         int src = move.getSrc();
         int dst = move.getDst();
         Piece piece = move.getPiece();
-        // Piece promoted = move.getPromoted();
+        Piece promoted = move.getPromoted();
         bool capture = move.getCapture();
-        // bool dblPush = move.getDblPush();
-        // bool enPassant = move.getEnPassant();
-        // bool castling = move.getCastling();
+        bool dblPush = move.getDblPush();
+        bool enPassant = move.getEnPassant();
+        bool castling = move.getCastling();
 
         // move piece
         Bitboard::popBit(state.piecePositions[piece], src);
@@ -32,6 +39,45 @@ int MakeMove::makeIt(EncodedMove const &move, MoveType type) {
                 }
             }
         }
+        if (promoted != P && promoted != p) {
+            Bitboard::popBit(
+                state.piecePositions[(state.sideToMove == white) ? P : p], dst);
+            Bitboard::setBit(state.piecePositions[promoted], dst);
+        }
+        if (enPassant) {
+            (state.sideToMove == white)
+                ? Bitboard::popBit(state.piecePositions[p], dst + 8)
+                : Bitboard::popBit(state.piecePositions[P], dst - 8);
+        }
+        state.enPassantSquare = no_sq;
+        if (dblPush) {
+            (state.sideToMove == white) ? (state.enPassantSquare = dst + 8)
+                                        : (state.enPassantSquare = dst - 8);
+        }
+        if (castling) {
+            switch (dst) {
+            case g1:
+                Bitboard::popBit(state.piecePositions[R], h1);
+                Bitboard::setBit(state.piecePositions[R], f1);
+                break;
+            case c1:
+                Bitboard::popBit(state.piecePositions[R], a1);
+                Bitboard::setBit(state.piecePositions[R], d1);
+                break;
+            case g8:
+                Bitboard::popBit(state.piecePositions[r], h8);
+                Bitboard::setBit(state.piecePositions[r], f8);
+                break;
+            case c8:
+                Bitboard::popBit(state.piecePositions[r], a8);
+                Bitboard::setBit(state.piecePositions[r], d8);
+                break;
+            }
+        }
+        // update castle rights
+        state.castleRights &= castling_rights[src];
+        state.castleRights &= castling_rights[dst];
+
     } else {
         if (move.getCapture()) {
             makeIt(move, all_moves);

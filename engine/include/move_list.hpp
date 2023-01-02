@@ -24,7 +24,7 @@ class MoveList {
         moves.push_back(move);
     }
 
-    size_t getSize() {
+    size_t getSize() const {
         return moves.size();
     }
 
