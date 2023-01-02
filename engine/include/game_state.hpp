@@ -16,7 +16,7 @@ class GameState {
     U64 piecePositions[12] = {0ULL}; // All pieces
     U64 occupancies[3] = {0ULL};     // Black, white and all
     int enPassantSquare = Types::Square::no_sq;
-    int sideToMove = -1;  // Side to move
+    int sideToMove = 0;   // Side to move
     int castleRights = 0; // Castling Rights
   private:
     enum AsciiPieces { P, N, B, R, Q, K, p, n, b, r, q, k };

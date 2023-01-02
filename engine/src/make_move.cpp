@@ -1,3 +1,4 @@
+#include <cstring>
 #include <make_move.hpp>
 
 MakeMove::~MakeMove() {
@@ -77,6 +78,21 @@ int MakeMove::makeIt(EncodedMove const &move, MoveType type) {
         // update castle rights
         state.castleRights &= castling_rights[src];
         state.castleRights &= castling_rights[dst];
+
+        // update occupancies
+        memset(state.occupancies, 0ULL, sizeof(state.occupancies));
+        for (int i = P; i <= K; ++i) {
+            state.occupancies[white] |= state.piecePositions[i];
+        }
+
+        for (int i = p; i <= k; ++i) {
+            state.occupancies[black] |= state.piecePositions[i];
+        }
+
+        state.occupancies[both] |= state.occupancies[white];
+        state.occupancies[both] |= state.occupancies[black];
+
+        state.sideToMove ^= 1;
 
     } else {
         if (move.getCapture()) {
