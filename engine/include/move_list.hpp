@@ -20,7 +20,7 @@ class MoveList {
         }
     }
 
-    void add(Move const &move) {
+    void add(EncodedMove const &move) {
         moves.push_back(move);
     }
 
@@ -28,8 +28,7 @@ class MoveList {
         return moves.size();
     }
 
-  private:
-    std::vector<Move> moves;
+    std::vector<EncodedMove> moves;
 };
 
 #endif // MOVE_LIST_H_

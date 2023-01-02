@@ -17,11 +17,11 @@ using namespace Types;
     1000 0000 0000 0000 0000 0000    castling flag       0x800000
 */
 
-class Move {
+class EncodedMove {
   public:
-    Move(Square src, Square dst, Piece piece, Piece promotedPiece,
-         unsigned int capture, unsigned int dblPush, unsigned int enPassant,
-         unsigned int castling) {
+    EncodedMove(Square src, Square dst, Piece piece, Piece promotedPiece,
+                unsigned int capture, unsigned int dblPush,
+                unsigned int enPassant, unsigned int castling) {
         move = static_cast<unsigned int>(src) |
                (static_cast<unsigned int>(dst) << 6) |
                (static_cast<unsigned int>(piece) << 12) |
@@ -30,7 +30,7 @@ class Move {
                (castling << 23);
     }
 
-    ~Move() {
+    ~EncodedMove() {
     }
 
     int getSrc() const {
