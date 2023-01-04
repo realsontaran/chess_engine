@@ -77,7 +77,7 @@ void GameState::printBoard(bool unicode) {
 void GameState::parseFEN(std::string const &fenStr) {
     memset(piecePositions, 0ULL, sizeof(piecePositions));
     memset(occupancies, 0ULL, sizeof(occupancies));
-    sideToMove = 0;
+    sideToMove = white;
     enPassantSquare = Types::no_sq;
     castleRights = 0;
 
