@@ -13,6 +13,7 @@ int MakeMove::makeIt(EncodedMove const &move, MoveType type) {
         15, 15, 15, 15, 15, 15, 15, 15, 13, 15, 15, 15, 12, 15, 15, 14};
 
     if (type == MoveType::all_moves) {
+        copyBoard();
         int src = move.getSrc();
         int dst = move.getDst();
         Piece piece = move.getPiece();
@@ -92,7 +93,17 @@ int MakeMove::makeIt(EncodedMove const &move, MoveType type) {
         state.occupancies[both] |= state.occupancies[white];
         state.occupancies[both] |= state.occupancies[black];
 
-        state.sideToMove ^= 1;
+        state.sideToMove = (state.sideToMove == white) ? black : white;
+
+        unsigned int kingSquare =
+            (state.sideToMove == white)
+                ? Bitboard::getLSB(state.piecePositions[k])
+                : Bitboard::getLSB(state.piecePositions[K]);
+        if (attackTable.isSquareAttacked(static_cast<Square>(kingSquare),
+                                         state.sideToMove, state)) {
+            takeBack();
+            return 0;
+        }
 
     } else {
         if (move.getCapture()) {
@@ -101,7 +112,7 @@ int MakeMove::makeIt(EncodedMove const &move, MoveType type) {
             return 0;
         }
     }
-    return 0;
+    return 1;
 }
 
 void MakeMove::copyBoard() {

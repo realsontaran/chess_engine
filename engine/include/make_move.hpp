@@ -1,6 +1,7 @@
 #ifndef MAKE_MOVE_H_
 #define MAKE_MOVE_H_
 
+#include <attack_table.hpp>
 #include <encoding.hpp>
 #include <game_state.hpp>
 
@@ -20,6 +21,7 @@ class MakeMove {
   private:
     GameState &state;
     GameState copyState;
+    AttackTable attackTable;
 };
 
 #endif // MAKE_MOVE_H_
