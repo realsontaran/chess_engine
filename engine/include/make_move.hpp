@@ -22,6 +22,14 @@ class MakeMove {
     GameState &state;
     GameState copyState;
     AttackTable attackTable;
+
+    void handleCastle(EncodedMove const &move);
+    void handleCapture(EncodedMove const &move);
+    void handlePromotion(EncodedMove const &move);
+    void handleEnPassant(EncodedMove const &move);
+    void handleDblPush(EncodedMove const &move);
+    void updateStats();
+    int checkLegalKingMove();
 };
 
 #endif // MAKE_MOVE_H_
