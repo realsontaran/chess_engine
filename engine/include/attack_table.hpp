@@ -1,6 +1,8 @@
 #ifndef ATTACK_TABLE_H_
 #define ATTACK_TABLE_H_
 
+#include <vector>
+
 #include <bitboard.hpp>
 #include <game_state.hpp>
 #include <types.hpp>
@@ -8,13 +10,19 @@
 
 class AttackTable {
   public:
-    AttackTable();
+    AttackTable()
+        : rookAttacks(64, std::vector<U64>(4096))
+        , bishopAttacks(64, std::vector<U64>(512)) {
+        initAll();
+    }
+
     virtual ~AttackTable();
 
     U64 pawnAttacks[2][64];
     U64 knightAttacks[64];
     U64 kingAttacks[64];
-    bool isSquareAttacked(Types::Square sq, Types::Side side, GameState &state);
+    bool isSquareAttacked(Types::Square sq, Types::Side side,
+                          GameState const &state);
     U64 getRookAttacks(Types::Square sq, U64 occ);
     U64 getBishopAttacks(Types::Square sq, U64 occ);
     U64 getQueenAttacks(Types::Square sq, U64 occ);
@@ -28,8 +36,8 @@ class AttackTable {
     U64 bishopMasks[64];
     U64 rookMasks[64];
 
-    U64 rookAttacks[64][4096];
-    U64 bishopAttacks[64][512];
+    std::vector<std::vector<U64>> rookAttacks;
+    std::vector<std::vector<U64>> bishopAttacks;
 
     void initAll();
     void initLeapers();

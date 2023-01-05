@@ -5,6 +5,7 @@ set(ENGINE_SRC
   "src/game_state.cpp"
   "src/move_generation.cpp"
   "src/make_move.cpp"
+  "src/perft.cpp"
  )
 
 add_library (

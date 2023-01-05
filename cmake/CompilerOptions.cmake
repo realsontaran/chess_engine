@@ -1,4 +1,6 @@
 set(COMPILE_OPTIONS
+    -Ofast
+    -ggdb
     -Wall
     -Wextra
     -Wshadow

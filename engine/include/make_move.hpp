@@ -7,21 +7,22 @@
 
 class MakeMove {
   public:
-    MakeMove(GameState &s)
+    MakeMove(GameState &s, AttackTable const &attackTable)
         : state(s)
-        , copyState(s) {
+        , copyState(state)
+        , attackT(attackTable) {
     }
 
     virtual ~MakeMove();
 
-    int makeIt(EncodedMove const &move, MoveType type);
+    bool makeIt(EncodedMove const &move, MoveType type);
     void copyBoard();
     void takeBack();
 
   private:
     GameState &state;
     GameState copyState;
-    AttackTable attackTable;
+    AttackTable attackT;
 
     void handleCastle(EncodedMove const &move);
     void handleCapture(EncodedMove const &move);
@@ -29,7 +30,7 @@ class MakeMove {
     void handleEnPassant(EncodedMove const &move);
     void handleDblPush(EncodedMove const &move);
     void updateStats();
-    int checkLegalKingMove();
+    bool checkLegalKingMove();
 };
 
 #endif // MAKE_MOVE_H_

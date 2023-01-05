@@ -19,14 +19,6 @@ class GameState {
     Types::Side sideToMove = Types::white; // Side to move
     int castleRights = 0;                  // Castling Rights
   private:
-    enum AsciiPieces { P, N, B, R, Q, K, p, n, b, r, q, k };
-
-    std::string unicodePieces[12] = {"\u2659", "\u2658", "\u2657", "\u2656",
-                                     "\u2655", "\u2654", "\u265F", "\u265E",
-                                     "\u265D", "\u265C", "\u265B", "\u265A"};
-
-    char const *asciiPieces = "PNBRQKpnbrqk";
-
     static int getPieceIdFromChar(char c);
 };
 

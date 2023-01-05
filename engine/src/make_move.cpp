@@ -102,20 +102,21 @@ void MakeMove::updateStats() {
     state.sideToMove = (state.sideToMove == white) ? black : white;
 }
 
-int MakeMove::checkLegalKingMove() {
+bool MakeMove::checkLegalKingMove() {
     unsigned int kingSquare = (state.sideToMove == white)
                                   ? Bitboard::getLSB(state.piecePositions[k])
                                   : Bitboard::getLSB(state.piecePositions[K]);
-    if (attackTable.isSquareAttacked(static_cast<Square>(kingSquare),
-                                     state.sideToMove, state)) {
+    if (attackT.isSquareAttacked(static_cast<Square>(kingSquare),
+                                 state.sideToMove, state)) {
         takeBack();
-        return 0;
+        return false;
     }
-    return 1;
+    return true;
 }
 
-int MakeMove::makeIt(EncodedMove const &move, MoveType type) {
+bool MakeMove::makeIt(EncodedMove const &move, MoveType type) {
     if (type == MoveType::all_moves) {
+        // Copy State before making move
         copyBoard();
         int src = move.getSrc();
         int dst = move.getDst();
@@ -138,10 +139,10 @@ int MakeMove::makeIt(EncodedMove const &move, MoveType type) {
     if (move.getCapture()) {
         makeIt(move, all_moves);
     } else {
-        return 0;
+        return false;
     }
 
-    return 1;
+    return true;
 }
 
 void MakeMove::copyBoard() {

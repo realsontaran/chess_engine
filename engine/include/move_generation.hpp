@@ -9,10 +9,11 @@
 
 class MoveGeneration {
   public:
-    MoveGeneration(GameState const &s, MoveList *moveList)
-        : state(s)
+    MoveGeneration(GameState const &s, MoveList &moveList,
+                   AttackTable const &attackTable)
+        : attackT(attackTable)
+        , state(s)
         , moves(moveList) {
-        attackTable = AttackTable();
     }
 
     virtual ~MoveGeneration();
@@ -20,9 +21,9 @@ class MoveGeneration {
     void generateMoves();
 
   private:
-    AttackTable attackTable;
+    AttackTable attackT;
     GameState state;
-    MoveList *moves;
+    MoveList &moves;
 
     void generatePawnMoves(Types::Side side);
     U64 wSinglePushPawns();

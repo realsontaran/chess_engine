@@ -1,6 +1,6 @@
 #ifndef TYPES_H_
 #define TYPES_H_
-
+#include <string>
 namespace Types {
 
     enum File {
@@ -38,9 +38,9 @@ namespace Types {
     };
 
     // clang-format on
-    inline char const *squareToString(int sq) {
+    inline std::string  squareToString(int sq) {
         if (sq < 64 && sq >= 0) {
-            static char const *square_strings[] = {
+            static const std::string square_strings[] = {
                 "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8", "a7", "b7",
                 "c7", "d7", "e7", "f7", "g7", "h7", "a6", "b6", "c6", "d6",
                 "e6", "f6", "g6", "h6", "a5", "b5", "c5", "d5", "e5", "f5",
@@ -50,7 +50,7 @@ namespace Types {
                 "e1", "f1", "g1", "h1"};
             return square_strings[sq];
         }
-        return nullptr;
+        return "";
     }
 
     inline char pieceToString(int piece) {

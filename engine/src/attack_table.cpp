@@ -26,9 +26,6 @@ const int AttackTable::rookRelevants[] = {
 };
 
 // clang-format on
-AttackTable::AttackTable() {
-    initAll();
-}
 
 AttackTable::~AttackTable() {
 }
@@ -440,7 +437,7 @@ void AttackTable::initAll() {
 
 // Is given square attacked by given side
 bool AttackTable::isSquareAttacked(Types::Square sq, Types::Side side,
-                                   GameState &state) {
+                                   GameState const &state) {
     if ((side == Types::white) && ((pawnAttacks[Types::black][sq] &
                                     state.piecePositions[Types::P]) != 0ULL)) {
         return true;

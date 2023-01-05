@@ -1,3 +1,4 @@
+#include "types.hpp"
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
@@ -16,41 +17,46 @@ GameState::~GameState() {
 int GameState::getPieceIdFromChar(char c) {
     switch (c) {
     case 'P':
-        return AsciiPieces::P;
+        return Piece::P;
     case 'N':
-        return AsciiPieces::N;
+        return Piece::N;
     case 'B':
-        return AsciiPieces::B;
+        return Piece::B;
     case 'R':
-        return AsciiPieces::R;
+        return Piece::R;
     case 'Q':
-        return AsciiPieces::Q;
+        return Piece::Q;
     case 'K':
-        return AsciiPieces::K;
+        return Piece::K;
     case 'p':
-        return AsciiPieces::p;
+        return Piece::p;
     case 'n':
-        return AsciiPieces::n;
+        return Piece::n;
     case 'b':
-        return AsciiPieces::b;
+        return Piece::b;
     case 'r':
-        return AsciiPieces::r;
+        return Piece::r;
     case 'q':
-        return AsciiPieces::q;
+        return Piece::q;
     case 'k':
-        return AsciiPieces::k;
+        return Piece::k;
     }
     return -1;
 }
 
 void GameState::printBoard(bool unicode) {
     // clang-format on
+    std::string unicodePieces[12] = {"\u2659", "\u2658", "\u2657", "\u2656",
+                                     "\u2655", "\u2654", "\u265F", "\u265E",
+                                     "\u265D", "\u265C", "\u265B", "\u265A"};
+
+    std::string asciiPieces = "PNBRQKpnbrqk";
     for (int rank = 0; rank < 8; ++rank) {
         printf("  %d ", 8 - rank);
         for (int file = 0; file < 8; ++file) {
             int square = rank * 8 + file;
             std::string pieceStr = ".";
-            for (int bb_piece = P; bb_piece <= k; ++bb_piece) {
+            for (auto bb_piece = P; bb_piece <= k; ++bb_piece) {
                 if (getBit(piecePositions[bb_piece], square) != 0U) {
                     pieceStr = unicode ? unicodePieces[bb_piece]
                                        : std::string(1, asciiPieces[bb_piece]);
@@ -66,7 +72,7 @@ void GameState::printBoard(bool unicode) {
     printf("     Side:     %s\n", sideToMove == 0 ? "white" : "black");
     printf("     En_passant:   %s\n",
            (enPassantSquare != Types::no_sq)
-               ? Types::squareToString(enPassantSquare)
+               ? Types::squareToString(enPassantSquare).c_str()
                : "no");
     printf("     Castling:  %c%c%c%c\n\n", (castleRights & wk) != 0 ? 'K' : '-',
            (castleRights & wq) != 0 ? 'Q' : '-',
