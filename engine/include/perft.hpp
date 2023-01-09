@@ -16,17 +16,13 @@ class PERFT {
     ~PERFT() {
     }
 
-    U64 perftDriver(int depth);
+    long perftDriver(int depth);
+    void perftTest(int depth);
     void print();
 
   private:
     GameState state;
     AttackTable attackT;
-    int capture = 0;
-    int ep = 0;
-    int castle = 0;
-    int prom = 0;
-    int check = 0;
 };
 
 #endif // PERFT_H_

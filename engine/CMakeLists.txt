@@ -6,6 +6,7 @@ set(ENGINE_SRC
   "src/move_generation.cpp"
   "src/make_move.cpp"
   "src/perft.cpp"
+  "src/uci.cpp"
  )
 
 add_library (

@@ -182,6 +182,11 @@ void MoveGeneration::generatePawnMoves(Side side) {
                                   static_cast<Square>(dstSq), pawn,
                                   promoPiece[3], 0, 0, 0, 0));
         } else {
+            // Single push pawns
+            moves.add(EncodedMove(static_cast<Square>(srcSq),
+                                  static_cast<Square>(dstSq), pawn, Piece::P, 0,
+                                  0, 0, 0));
+
             // Double push pawns
             while ((srcDBB != 0ULL)) {
                 int srcSqD = static_cast<int>(Bitboard::getLSB(srcDBB));
@@ -193,10 +198,6 @@ void MoveGeneration::generatePawnMoves(Side side) {
                 Bitboard::popBit(srcDBB, srcSqD);
                 Bitboard::popBit(dstDBB, dstSqD);
             }
-            // Single push pawns
-            moves.add(EncodedMove(static_cast<Square>(srcSq),
-                                  static_cast<Square>(dstSq), pawn, Piece::P, 0,
-                                  0, 0, 0));
         }
         if (state.enPassantSquare != no_sq) {
             U64 enPassantAttacks = attackT.pawnAttacks[side][srcSq] &
