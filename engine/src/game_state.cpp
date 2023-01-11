@@ -136,14 +136,16 @@ void GameState::parseFEN(std::string const &fenStr) {
         enPassantSquare = Types::no_sq;
     }
     // loop over white pieces bitboards
-    for (int piece = P; piece <= K; piece++)
+    for (int piece = P; piece <= K; piece++) {
         // populate white occupancy bitboard
         occupancies[Types::white] |= piecePositions[piece];
+    }
 
     // loop over black pieces bitboards
-    for (int piece = p; piece <= k; piece++)
+    for (int piece = p; piece <= k; piece++) {
         // populate white occupancy bitboard
         occupancies[Types::black] |= piecePositions[piece];
+    }
 
     // init all occupancies
     occupancies[Types::both] |= occupancies[Types::white];

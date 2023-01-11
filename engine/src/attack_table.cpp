@@ -143,17 +143,21 @@ U64 AttackTable::bishopAttackMask(Types::Square sq) {
     int t_file = sq % 8;
 
     for (rank = t_rank + 1, file = t_file + 1; rank < 7 && file < 7;
-         ++rank, ++file)
+         ++rank, ++file) {
         attacks |= (1ULL << (rank * 8 + file));
+    }
     for (rank = t_rank - 1, file = t_file + 1; rank >= 1 && file < 7;
-         --rank, ++file)
+         --rank, ++file) {
         attacks |= (1ULL << (rank * 8 + file));
+    }
     for (rank = t_rank + 1, file = t_file - 1; rank < 7 && file >= 1;
-         ++rank, --file)
+         ++rank, --file) {
         attacks |= (1ULL << (rank * 8 + file));
+    }
     for (rank = t_rank - 1, file = t_file - 1; rank >= 1 && file >= 1;
-         --rank, --file)
+         --rank, --file) {
         attacks |= (1ULL << (rank * 8 + file));
+    }
     return attacks;
 }
 
@@ -167,17 +171,21 @@ U64 AttackTable::rookAttackMask(Types::Square sq) {
     int t_rank = sq / 8;
     int t_file = sq % 8;
 
-    for (rank = t_rank + 1; rank < 7; ++rank)
+    for (rank = t_rank + 1; rank < 7; ++rank) {
         attacks |= (1ULL << (rank * 8 + t_file));
+    }
 
-    for (rank = t_rank - 1; rank >= 1; --rank)
+    for (rank = t_rank - 1; rank >= 1; --rank) {
         attacks |= (1ULL << (rank * 8 + t_file));
+    }
 
-    for (file = t_file + 1; file < 7; ++file)
+    for (file = t_file + 1; file < 7; ++file) {
         attacks |= (1ULL << (t_rank * 8 + file));
+    }
 
-    for (file = t_file - 1; file >= 1; --file)
+    for (file = t_file - 1; file >= 1; --file) {
         attacks |= (1ULL << (t_rank * 8 + file));
+    }
 
     return attacks;
 }
@@ -195,26 +203,30 @@ U64 AttackTable::generateBishopAttacks(Types::Square sq, U64 blocks) {
     for (rank = t_rank + 1, file = t_file + 1; rank < 8 && file < 8;
          ++rank, ++file) {
         attacks |= (1ULL << (rank * 8 + file));
-        if (((1ULL << (rank * 8 + file)) & blocks) != 0ULL)
+        if (((1ULL << (rank * 8 + file)) & blocks) != 0ULL) {
             break;
+        }
     }
     for (rank = t_rank - 1, file = t_file + 1; rank >= 0 && file < 8;
          --rank, ++file) {
         attacks |= (1ULL << (rank * 8 + file));
-        if (((1ULL << (rank * 8 + file)) & blocks) != 0ULL)
+        if (((1ULL << (rank * 8 + file)) & blocks) != 0ULL) {
             break;
+        }
     }
     for (rank = t_rank + 1, file = t_file - 1; rank < 8 && file >= 0;
          ++rank, --file) {
         attacks |= (1ULL << (rank * 8 + file));
-        if (((1ULL << (rank * 8 + file)) & blocks) != 0ULL)
+        if (((1ULL << (rank * 8 + file)) & blocks) != 0ULL) {
             break;
+        }
     }
     for (rank = t_rank - 1, file = t_file - 1; rank >= 0 && file >= 0;
          --rank, --file) {
         attacks |= (1ULL << (rank * 8 + file));
-        if (((1ULL << (rank * 8 + file)) & blocks) != 0ULL)
+        if (((1ULL << (rank * 8 + file)) & blocks) != 0ULL) {
             break;
+        }
     }
 
     return attacks;
@@ -232,25 +244,29 @@ U64 AttackTable::generateRookAttacks(Types::Square sq, U64 blocks) {
 
     for (rank = t_rank + 1; rank < 8; ++rank) {
         attacks |= (1ULL << (rank * 8 + t_file));
-        if (((1ULL << (rank * 8 + t_file)) & blocks) != 0ULL)
+        if (((1ULL << (rank * 8 + t_file)) & blocks) != 0ULL) {
             break;
+        }
     }
 
     for (rank = t_rank - 1; rank >= 0; --rank) {
         attacks |= (1ULL << (rank * 8 + t_file));
-        if (((1ULL << (rank * 8 + t_file)) & blocks) != 0ULL)
+        if (((1ULL << (rank * 8 + t_file)) & blocks) != 0ULL) {
             break;
+        }
     }
 
     for (file = t_file + 1; file < 8; ++file) {
         attacks |= (1ULL << (t_rank * 8 + file));
-        if (((1ULL << (t_rank * 8 + file)) & blocks) != 0ULL)
+        if (((1ULL << (t_rank * 8 + file)) & blocks) != 0ULL) {
             break;
+        }
     }
     for (file = t_file - 1; file >= 0; --file) {
         attacks |= (1ULL << (t_rank * 8 + file));
-        if (((1ULL << (t_rank * 8 + file)) & blocks) != 0ULL)
+        if (((1ULL << (t_rank * 8 + file)) & blocks) != 0ULL) {
             break;
+        }
     }
 
     return attacks;
@@ -303,8 +319,9 @@ U64 AttackTable::findMagics(Types::Square sq, int relevant_bits, bool bishop) {
 
         // skip inappropriate magic numbers
         if (Bitboard::getBitCount((attack_mask * magic_number) &
-                                  0xFF00000000000000) < 6)
+                                  0xFF00000000000000) < 6) {
             continue;
+        }
 
         // init used attacks
         memset(used_attacks, 0ULL, sizeof(used_attacks));
@@ -321,16 +338,18 @@ U64 AttackTable::findMagics(Types::Square sq, int relevant_bits, bool bishop) {
                 (occupancies[index] * magic_number) >> (64 - relevant_bits));
 
             // if magic index works
-            if (used_attacks[magic_index] == 0ULL)
+            if (used_attacks[magic_index] == 0ULL) {
                 used_attacks[magic_index] = attacks[index];
-            else if (used_attacks[magic_index] != attacks[index])
+            } else if (used_attacks[magic_index] != attacks[index]) {
                 fail = 1;
+            }
         }
 
         // if magic number works
-        if (fail == 0)
+        if (fail == 0) {
             // return it
             return magic_number;
+        }
     }
 
     // if magic number doesn't work
@@ -339,7 +358,7 @@ U64 AttackTable::findMagics(Types::Square sq, int relevant_bits, bool bishop) {
 }
 
 void AttackTable::initSliders(bool bishop) {
-    for (int sq = 0; sq < 64; sq++) {
+    for (size_t sq = 0; sq < 64; sq++) {
         bishopMasks[sq] = bishopAttackMask(static_cast<Types::Square>(sq));
 
         rookMasks[sq] = rookAttackMask(static_cast<Types::Square>(sq));
@@ -353,15 +372,15 @@ void AttackTable::initSliders(bool bishop) {
             if (bishop) {
                 U64 occ =
                     setOccupancies(index, relevant_bit_count, attack_mask);
-                int magic_index = static_cast<int>((occ * bishopMagics[sq]) >>
-                                                   (64 - bishopRelevants[sq]));
+                size_t magic_index = static_cast<size_t>(
+                    (occ * bishopMagics[sq]) >> (64 - bishopRelevants[sq]));
                 bishopAttacks[sq][magic_index] =
                     generateBishopAttacks(static_cast<Types::Square>(sq), occ);
             } else {
                 U64 occ =
                     setOccupancies(index, relevant_bit_count, attack_mask);
-                int magic_index = static_cast<int>((occ * rookMagics[sq]) >>
-                                                   (64 - rookRelevants[sq]));
+                size_t magic_index = static_cast<size_t>(
+                    (occ * rookMagics[sq]) >> (64 - rookRelevants[sq]));
                 rookAttacks[sq][magic_index] =
                     generateRookAttacks(static_cast<Types::Square>(sq), occ);
             }
@@ -403,13 +422,15 @@ U64 AttackTable::getBishopAttacks(Types::Square sq, U64 occ) {
 }
 
 void AttackTable::initMagics() { // NOLINT
-    for (int sq = 0; sq < 64; sq++)
+    for (int sq = 0; sq < 64; sq++) {
         printf(" 0x%llxULL\n", findMagics(static_cast<Types::Square>(sq),
                                           rookRelevants[sq], false));
+    }
 
-    for (int sq = 0; sq < 64; sq++)
+    for (int sq = 0; sq < 64; sq++) {
         printf("0x%llxULL\n", findMagics(static_cast<Types::Square>(sq),
                                          bishopRelevants[sq], true));
+    }
 }
 
 void AttackTable::initLeapers() {

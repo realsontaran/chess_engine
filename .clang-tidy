@@ -9,6 +9,7 @@ Checks: >
   performance-*,
   portability-*,
   readability-*,
+  -misc-no-recursion
   -readability-braces-around-statements,
   -readability-identifier-length,
   -readability-magic-numbers,

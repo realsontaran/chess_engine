@@ -22,6 +22,7 @@ class Evaluation {
     int evaluate();
     int negamax(int alpha, int beta, int depth);
     void searchPosition(int depth);
+    int quiescence(int alpha, int beta);
 
   private:
     GameState state;

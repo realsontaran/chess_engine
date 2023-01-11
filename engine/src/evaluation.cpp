@@ -61,10 +61,11 @@ int Evaluation::evaluate() {
     return (state.sideToMove == white) ? score : -score;
 }
 
-int Evaluation::negamax(int alpha, int beta, int depth) {
-    if (depth == 0)
-        // return evaluation
-        return evaluate();
+int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
+    if (depth == 0) {
+        // return quiescence
+        return quiescence(alpha, beta);
+    }
     nodes++;
 
     unsigned int king_square = (state.sideToMove == white)
@@ -121,25 +122,71 @@ int Evaluation::negamax(int alpha, int beta, int depth) {
     // we don't have any legal moves to make in the current postion
     if (legal_moves == 0) {
         // king is in check
-        if (in_check)
+        if (in_check) {
             // return mating score (assuming closest distance to mating
             // position)
             return -49000 + ply;
+        }
 
         // return stalemate score
         return 0;
     }
     // found better move
-    if (old_alpha != alpha)
+    if (old_alpha != alpha) {
         // init best move
         bestMove = bestSofar;
+    }
 
     // node (move) fails low
     return alpha;
 }
 
+int Evaluation::quiescence(int alpha, int beta) { // NOLINT
+    int evaluation = evaluate();
+    // fail-hard beta cutoff
+    if (evaluation >= beta) {
+        // node (move) fails high
+        return beta;
+    }
+    // found a better move
+    if (evaluation > alpha) {
+        // PV node (move)
+        alpha = evaluation;
+    }
+    MoveList moveList;
+    MoveGeneration generator(state, moveList, attackTable);
+    generator.generateMoves();
+
+    MakeMove makeMove(state, attackTable);
+    for (auto const &m : moveList.moves) {
+        makeMove.copyBoard();
+
+        ++ply;
+
+        if (!makeMove.makeIt(m, Types::only_captures)) {
+            ply--;
+            continue;
+        }
+        int score = -quiescence(-beta, -alpha);
+        ply--;
+        makeMove.takeBack();
+        if (score >= beta) {
+            // node (move) fails high
+            return beta;
+        }
+        // found a better move
+        if (score > alpha) {
+            // PV node (move)
+            alpha = score;
+        }
+    }
+    return alpha;
+}
+
 void Evaluation::searchPosition(int depth) {
     int score = negamax(-50000, 50000, depth);
-    if (!bestMove.empty)
+    if (!bestMove.empty) {
+        printf("info score cp %d depth %d nodes %ld\n", score, depth, nodes);
         std::cout << "bestmove " << bestMove.uciString() << std::endl;
+    }
 }

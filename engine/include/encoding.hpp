@@ -32,7 +32,8 @@ class EncodedMove {
     }
 
     EncodedMove()
-        : empty(true) {
+        : empty(true)
+        , move(0) {
     }
 
     ~EncodedMove() {

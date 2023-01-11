@@ -114,7 +114,7 @@ bool MakeMove::checkLegalKingMove() {
     return true;
 }
 
-bool MakeMove::makeIt(EncodedMove const &move, MoveType type) {
+bool MakeMove::makeIt(EncodedMove const &move, MoveType type) { // NOLINT
     if (type == MoveType::all_moves) {
         // Copy State before making move
         copyBoard();

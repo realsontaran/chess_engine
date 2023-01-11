@@ -1,7 +1,7 @@
 #include "time.hpp"
 #include <perft.hpp>
 
-long PERFT::perftDriver(int depth) {
+long PERFT::perftDriver(int depth) { // NOLINT
     if (depth == 0) {
         return 1;
     }
@@ -14,8 +14,9 @@ long PERFT::perftDriver(int depth) {
 
     for (auto const &m : move_list.moves) {
         makeMove.copyBoard();
-        if (!makeMove.makeIt(m, Types::all_moves))
+        if (!makeMove.makeIt(m, Types::all_moves)) {
             continue;
+        }
         nodes += perftDriver(depth - 1);
         makeMove.takeBack();
     }
@@ -34,8 +35,9 @@ void PERFT::perftTest(int depth) {
     long start = getTimeInMS();
     for (auto const &m : move_list.moves) {
         makeMove.copyBoard();
-        if (!makeMove.makeIt(m, Types::all_moves))
+        if (!makeMove.makeIt(m, Types::all_moves)) {
             return;
+        }
         long cumulative_nodes = nodes;
         nodes += perftDriver(depth - 1);
         long old_nodes = nodes - cumulative_nodes;
