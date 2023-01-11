@@ -137,12 +137,9 @@ bool MakeMove::makeIt(EncodedMove const &move, MoveType type) { // NOLINT
         return checkLegalKingMove();
     }
     if (move.getCapture()) {
-        makeIt(move, all_moves);
-    } else {
-        return false;
+        return makeIt(move, all_moves);
     }
-
-    return true;
+    return false;
 }
 
 void MakeMove::copyBoard() {
