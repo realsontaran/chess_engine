@@ -74,6 +74,9 @@ int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
     Side side = (state.sideToMove == white) ? black : white;
     bool in_check = attackTable.isSquareAttacked(
         static_cast<Square>(king_square), side, state);
+    if (in_check) {
+        depth++;
+    }
     // legal moves counter
     int legal_moves = 0;
 
@@ -88,6 +91,8 @@ int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
     generator.generateMoves();
 
     MakeMove makeMove(state, attackTable);
+
+    sortMoves(moveList);
     for (auto const &m : moveList.moves) {
         makeMove.copyBoard();
 
@@ -142,6 +147,7 @@ int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
 }
 
 int Evaluation::quiescence(int alpha, int beta) { // NOLINT
+    nodes++;
     int evaluation = evaluate();
     // fail-hard beta cutoff
     if (evaluation >= beta) {
@@ -158,6 +164,7 @@ int Evaluation::quiescence(int alpha, int beta) { // NOLINT
     generator.generateMoves();
 
     MakeMove makeMove(state, attackTable);
+    sortMoves(moveList);
     for (auto const &m : moveList.moves) {
         makeMove.copyBoard();
 
@@ -189,4 +196,59 @@ void Evaluation::searchPosition(int depth) {
         printf("info score cp %d depth %d nodes %ld\n", score, depth, nodes);
         std::cout << "bestmove " << bestMove.uciString() << std::endl;
     }
+}
+
+int Evaluation::scoreMove(EncodedMove const &move) {
+    if (move.getCapture()) {
+        Piece target = P;
+        int start = P;
+        int end = K;
+        if (state.sideToMove == white) {
+            start = p;
+            end = k;
+        }
+
+        for (int i = start; i <= end; ++i) {
+            if (Bitboard::getBit(state.piecePositions[i], move.getDst()) !=
+                0U) {
+                target = static_cast<Piece>(i);
+                break;
+            }
+        }
+        return mvv_lva[move.getPiece()][target];
+    }
+
+    return 0;
+}
+
+void Evaluation::printScoreMove(MoveList const &moves) {
+    std::cout << "Move Scores:";
+    for (auto const &m : moves.moves) {
+        printf("     move: ");
+        std::cout << m.toString();
+        printf(" score: %d\n", scoreMove(m));
+    }
+}
+
+int Evaluation::sortMoves(MoveList &moves) {
+    std::vector<int> moveScores;
+    for (auto const &m : moves.moves) {
+        moveScores.push_back(scoreMove(m));
+    }
+
+    for (size_t i = 0; i < moves.getSize(); i++) {
+
+        for (size_t j = i + 1; j < moves.getSize(); j++) {
+            if (moveScores[i] < moveScores[j]) {
+                int tmpScore = moveScores[i];
+                moveScores[i] = moveScores[j];
+                moveScores[j] = tmpScore;
+
+                EncodedMove tmpMove = moves.moves[i];
+                moves.moves[i] = moves.moves[j];
+                moves.moves[j] = tmpMove;
+            }
+        }
+    }
+    return 0;
 }

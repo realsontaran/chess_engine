@@ -7,6 +7,7 @@
 #include "move_generation.hpp"
 #include "move_list.hpp"
 #include <types.hpp>
+#include <bits/stdc++.h>
 using namespace Types;
 
 class Evaluation {
@@ -23,6 +24,9 @@ class Evaluation {
     int negamax(int alpha, int beta, int depth);
     void searchPosition(int depth);
     int quiescence(int alpha, int beta);
+    int scoreMove(EncodedMove const &move);
+    void printScoreMove(MoveList const &moves);
+    int sortMoves(MoveList &moves);
 
   private:
     GameState state;
@@ -89,6 +93,33 @@ class Evaluation {
         a3, b3, c3, d3, e3, f3, g3, h3, a4, b4, c4, d4, e4, f4, g4, h4,
         a5, b5, c5, d5, e5, f5, g5, h5, a6, b6, c6, d6, e6, f6, g6, h6,
         a7, b7, c7, d7, e7, f7, g7, h7, a8, b8, c8, d8, e8, f8, g8, h8};
+
+    // most valuable victim & less valuable attacker
+    /*
+
+        (Victims) Pawn Knight Bishop   Rook  Queen   King
+      (Attackers)
+            Pawn   105    205    305    405    505    605
+          Knight   104    204    304    404    504    604
+          Bishop   103    203    303    403    503    603
+            Rook   102    202    302    402    502    602
+           Queen   101    201    301    401    501    601
+            King   100    200    300    400    500    600
+    */
+    // MVV LVA [attacker][victim]
+    int const mvv_lva[12][12] = {
+        {105, 205, 305, 405, 505, 605, 105, 205, 305, 405, 505, 605},
+        {104, 204, 304, 404, 504, 604, 104, 204, 304, 404, 504, 604},
+        {103, 203, 303, 403, 503, 603, 103, 203, 303, 403, 503, 603},
+        {102, 202, 302, 402, 502, 602, 102, 202, 302, 402, 502, 602},
+        {101, 201, 301, 401, 501, 601, 101, 201, 301, 401, 501, 601},
+        {100, 200, 300, 400, 500, 600, 100, 200, 300, 400, 500, 600},
+        {105, 205, 305, 405, 505, 605, 105, 205, 305, 405, 505, 605},
+        {104, 204, 304, 404, 504, 604, 104, 204, 304, 404, 504, 604},
+        {103, 203, 303, 403, 503, 603, 103, 203, 303, 403, 503, 603},
+        {102, 202, 302, 402, 502, 602, 102, 202, 302, 402, 502, 602},
+        {101, 201, 301, 401, 501, 601, 101, 201, 301, 401, 501, 601},
+        {100, 200, 300, 400, 500, 600, 100, 200, 300, 400, 500, 600}};
 };
 
 #endif // EVALUATION_H_
