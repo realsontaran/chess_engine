@@ -3,15 +3,15 @@
 
 #include "attack_table.hpp"
 #include "encoding.hpp"
+#include "evaluation.hpp"
 #include "make_move.hpp"
 #include <string>
 
 class UCI {
   public:
-    UCI(AttackTable const &attackTable, GameState &s, MakeMove const &makeMove)
+    UCI(AttackTable const &attackTable, GameState &s)
         : attackT(attackTable)
-        , state(s)
-        , makeM(makeMove) {
+        , state(s) {
     }
 
     ~UCI() {
@@ -25,7 +25,6 @@ class UCI {
   private:
     AttackTable attackT;
     GameState &state;
-    MakeMove makeM;
 };
 
 #endif // UCI_H_

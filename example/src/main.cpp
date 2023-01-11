@@ -1,3 +1,4 @@
+#include "evaluation.hpp"
 #include "make_move.hpp"
 #include "move_list.hpp"
 #include "perft.hpp"
@@ -13,6 +14,8 @@
 using namespace Types;
 using namespace Bitboard;
 
+#define DEBUG 0
+
 int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
@@ -22,11 +25,17 @@ int main(int argc, char *argv[]) {
     AttackTable attackTable = AttackTable();
     GameState state;
 
-    MakeMove makeMove(state, attackTable);
-    UCI uci(attackTable, state, makeMove);
-    uci.uciLoop();
-    // PERFT perft(attackTable, state);
-    // perft.perftTest(3);
+    if (DEBUG) {
+        state.parseFEN("4k3/8/5K2/8/1Q6/8/8/8 w - - 1 1");
 
+        Evaluation eval(state, attackTable);
+        state.printBoard(true);
+        eval.searchPosition(2);
+    } else {
+        UCI uci(attackTable, state);
+        uci.uciLoop();
+        // PERFT perft(attackTable, state);
+        // perft.perftTest(3);
+    }
     return 0;
 }

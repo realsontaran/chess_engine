@@ -7,6 +7,7 @@ set(ENGINE_SRC
   "src/make_move.cpp"
   "src/perft.cpp"
   "src/uci.cpp"
+  "src/evaluation.cpp"
  )
 
 add_library (

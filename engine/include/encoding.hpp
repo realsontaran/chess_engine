@@ -1,6 +1,7 @@
 #ifndef ENCODING_H_
 #define ENCODING_H_
 
+#include <iostream>
 #include <string>
 #include <types.hpp>
 using namespace Types;
@@ -30,15 +31,19 @@ class EncodedMove {
                (castling << 23);
     }
 
+    EncodedMove()
+        : empty(true) {
+    }
+
     ~EncodedMove() {
     }
 
-    int getSrc() const {
-        return static_cast<int>(move & 0x3f);
+    Square getSrc() const {
+        return static_cast<Square>(move & 0x3f);
     }
 
-    int getDst() const {
-        return static_cast<int>((move & 0xfc0) >> 6);
+    Square getDst() const {
+        return static_cast<Square>((move & 0xfc0) >> 6);
     }
 
     Piece getPiece() const {
@@ -65,7 +70,23 @@ class EncodedMove {
         return (move & 0x800000) != 0;
     }
 
+    std::string uciString() const {
+        if (empty) {
+            return "";
+        }
+        if (getPromoted() != P && getPromoted() != p) {
+            return std::string(squareToString(getSrc())) +
+                   std::string(squareToString(getDst())) +
+                   pieceToString(getPromoted());
+        }
+        return std::string(squareToString(getSrc())) +
+               std::string(squareToString(getDst()));
+    }
+
     std::string toString() const {
+        if (empty) {
+            return "";
+        }
         return std::string(squareToString(getSrc())) + " " +
                std::string(squareToString(getDst())) + " " +
                pieceToString(getPiece()) + " " +
@@ -77,6 +98,8 @@ class EncodedMove {
                std::to_string(static_cast<int>(getEnPassant())) + " " +
                std::to_string(static_cast<int>(getCastling()));
     }
+
+    bool empty = false;
 
   protected:
     unsigned int move;

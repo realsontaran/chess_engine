@@ -82,7 +82,7 @@ void UCI::parsePosition(char *command) {
         current_char += 6;
 
         // loop over moves within a move string
-        while (*current_char) {
+        while (*current_char != 0) {
             // parse next move
             EncodedMove move = parseMove(current_char);
 
@@ -92,6 +92,7 @@ void UCI::parsePosition(char *command) {
                 break;
 
             // make move on the chess board
+            MakeMove makeM(state, attackT);
             makeM.makeIt(move, all_moves);
 
             // move current character mointer to the end of current move
@@ -105,11 +106,6 @@ void UCI::parsePosition(char *command) {
 
     // print board
     state.printBoard(true);
-}
-
-void search_position(int depth) {
-    // best move placeholder
-    printf("bestmove d2d4\n");
 }
 
 void UCI::parseGo(char *command) {
@@ -126,10 +122,12 @@ void UCI::parseGo(char *command) {
 
     // different time controls placeholder
     else
-        depth = 6;
+        depth = 2;
 
     // search position
-    search_position(depth);
+    Evaluation eval(state, attackT);
+    state.printBoard(true);
+    eval.searchPosition(depth);
 }
 
 void UCI::uciLoop() {
@@ -189,8 +187,8 @@ void UCI::uciLoop() {
         // parse UCI "uci" command
         else if (strncmp(input, "uci", 3) == 0) {
             // print engine info
-            printf("id name BBC\n");
-            printf("id name Code Monkey King\n");
+            printf("id name Chess Engine\n");
+            printf("id name Emre Ozbay\n");
             printf("uciok\n");
         }
     }
