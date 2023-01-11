@@ -39,6 +39,10 @@ class EncodedMove {
     ~EncodedMove() {
     }
 
+    bool operator==(EncodedMove const &rhs) const {
+        return move == rhs.move;
+    }
+
     Square getSrc() const {
         return static_cast<Square>(move & 0x3f);
     }

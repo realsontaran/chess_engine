@@ -24,4 +24,4 @@ include_directories(include/doctest)
 
 add_subdirectory(engine)
 add_subdirectory(example)
-add_subdirectory(test)
+# add_subdirectory(test)

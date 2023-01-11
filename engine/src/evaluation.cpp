@@ -109,11 +109,15 @@ int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
         ply--;
         makeMove.takeBack();
         if (score >= beta) {
+            // store killer moves
+            killerMoves[1][ply] = killerMoves[0][ply];
+            killerMoves[0][ply] = m;
             // node (move) fails high
             return beta;
         }
         // found a better move
         if (score > alpha) {
+            historyMoves[m.getPiece()][m.getDst()] += depth;
             // PV node (move)
             alpha = score;
 
@@ -218,11 +222,17 @@ int Evaluation::scoreMove(EncodedMove const &move) {
         return mvv_lva[move.getPiece()][target];
     }
 
-    return 0;
+    if (killerMoves[0][ply] == move) {
+        return 9000;
+    }
+    if (killerMoves[1][ply] == move) {
+        return 8000;
+    }
+    return historyMoves[move.getPiece()][move.getDst()];
 }
 
 void Evaluation::printScoreMove(MoveList const &moves) {
-    std::cout << "Move Scores:";
+    std::cout << "Move Scores:\n";
     for (auto const &m : moves.moves) {
         printf("     move: ");
         std::cout << m.toString();

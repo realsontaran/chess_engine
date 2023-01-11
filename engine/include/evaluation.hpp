@@ -33,7 +33,9 @@ class Evaluation {
     AttackTable attackTable;
     long nodes = 0;
     int ply = 0;
+
     EncodedMove bestMove;
+
     int const materialScore[12] = {
         100,   // white pawn score
         300,   // white knight scrore
@@ -120,6 +122,9 @@ class Evaluation {
         {102, 202, 302, 402, 502, 602, 102, 202, 302, 402, 502, 602},
         {101, 201, 301, 401, 501, 601, 101, 201, 301, 401, 501, 601},
         {100, 200, 300, 400, 500, 600, 100, 200, 300, 400, 500, 600}};
+
+    EncodedMove killerMoves[2][64] = {{EncodedMove()}};
+    int historyMoves[12][64] = {{0}};
 };
 
 #endif // EVALUATION_H_
