@@ -110,14 +110,18 @@ int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
         makeMove.takeBack();
         if (score >= beta) {
             // store killer moves
-            killerMoves[1][ply] = killerMoves[0][ply];
-            killerMoves[0][ply] = m;
+            if (!m.getCapture()) {
+                killerMoves[1][ply] = killerMoves[0][ply];
+                killerMoves[0][ply] = m;
+            }
             // node (move) fails high
             return beta;
         }
         // found a better move
         if (score > alpha) {
-            historyMoves[m.getPiece()][m.getDst()] += depth;
+            if (!m.getCapture()) {
+                historyMoves[m.getPiece()][m.getDst()] += depth;
+            }
             // PV node (move)
             alpha = score;
 
