@@ -62,6 +62,7 @@ int Evaluation::evaluate() {
 }
 
 int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
+    bool foundPv = false;
     // Init PV length
     pvLength[ply] = ply;
 
@@ -94,6 +95,9 @@ int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
 
     MakeMove makeMove(state, attackTable);
 
+    if (followPv) {
+        enablePvScoring(moveList);
+    }
     sortMoves(moveList);
     for (auto const &m : moveList.moves) {
         makeMove.copyBoard();
@@ -106,8 +110,18 @@ int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
         }
         // increment legal moves
         legal_moves++;
+        int score = 0;
 
-        int score = -negamax(-beta, -alpha, depth - 1);
+        if (foundPv) {
+            score = -negamax(-alpha - 1, -alpha, depth - 1);
+            if ((score > alpha) && (score < beta)) {
+                score = -negamax(-beta, -alpha, depth - 1);
+            }
+        } else {
+
+            score = -negamax(-beta, -alpha, depth - 1);
+        }
+
         ply--;
         makeMove.takeBack();
         if (score >= beta) {
@@ -126,6 +140,9 @@ int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
             }
             // PV node (move)
             alpha = score;
+
+            // enable foundPv
+            foundPv = true;
 
             // write PV move
             pvTable[ply][ply] = m;
@@ -203,7 +220,8 @@ void Evaluation::searchPosition(int depth) {
     reset();
 
     for (int current = 1; current <= depth; ++current) {
-        nodes = 0;
+        followPv = true;
+
         score = negamax(-50000, 50000, current);
         std::cout << "info score cp " << score << " depth " << current
                   << " nodes " << nodes << " pv ";
@@ -213,19 +231,15 @@ void Evaluation::searchPosition(int depth) {
         std::cout << std::endl;
     }
     std::cout << "bestmove " << pvTable[0][0].uciString() << std::endl;
-
-    reset();
-    score = negamax(-50000, 50000, depth);
-    std::cout << "info score cp " << score << " depth " << depth << " nodes "
-              << nodes << " pv ";
-    for (int i = 0; i < pvLength[0]; i++) {
-        std::cout << pvTable[0][i].uciString() << " ";
-    }
-    std::cout << std::endl;
-    std::cout << "bestmove " << pvTable[0][0].uciString() << std::endl;
 }
 
 int Evaluation::scoreMove(EncodedMove const &move) {
+    if (scorePv) {
+        if (pvTable[0][ply] == move) {
+            scorePv = false;
+            return 20000;
+        }
+    }
     if (move.getCapture()) {
         Piece target = P;
         int start = P;
@@ -301,4 +315,16 @@ void Evaluation::reset() {
     memset(pvLength, 0, sizeof(pvLength));
     memset(historyMoves, 0, sizeof(historyMoves));
     nodes = 0;
+    followPv = false;
+    scorePv = false;
+}
+
+void Evaluation::enablePvScoring(MoveList &moves) {
+    followPv = false;
+    for (auto const &m : moves.moves) {
+        if (pvTable[0][ply] == m) {
+            scorePv = true;
+            followPv = true;
+        }
+    }
 }

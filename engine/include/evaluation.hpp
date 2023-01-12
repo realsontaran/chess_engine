@@ -29,6 +29,7 @@ class Evaluation {
     int scoreMove(EncodedMove const &move);
     void printScoreMove(MoveList const &moves);
     int sortMoves(MoveList &moves);
+    void enablePvScoring(MoveList &moves);
 
   private:
     void reset();
@@ -147,6 +148,9 @@ class Evaluation {
 
     // PV table
     EncodedMove pvTable[MAX_PLY][MAX_PLY] = {{EncodedMove()}};
+
+    bool followPv = false;
+    bool scorePv = false;
 };
 
 #endif // EVALUATION_H_

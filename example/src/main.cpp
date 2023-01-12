@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
     GameState state;
 
     if (DEBUG) {
-        state.parseFEN(tricky_position);
+        state.parseFEN(cmk_position);
         state.printBoard(true);
         Evaluation eval(state, attackTable);
         eval.searchPosition(4);
