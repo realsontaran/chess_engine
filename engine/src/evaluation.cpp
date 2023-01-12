@@ -62,6 +62,9 @@ int Evaluation::evaluate() {
 }
 
 int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
+    // Init PV length
+    pvLength[ply] = ply;
+
     if (depth == 0) {
         // return quiescence
         return quiescence(alpha, beta);
@@ -79,12 +82,6 @@ int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
     }
     // legal moves counter
     int legal_moves = 0;
-
-    // best move so far
-    EncodedMove bestSofar;
-
-    // old value of alpha
-    int old_alpha = alpha;
 
     MoveList moveList;
     MoveGeneration generator(state, moveList, attackTable);
@@ -125,11 +122,15 @@ int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
             // PV node (move)
             alpha = score;
 
-            // if root move
-            if (ply == 0) {
-                // associate best move with the best score
-                bestSofar = m;
+            // write PV move
+            pvTable[ply][ply] = m;
+
+            for (int nextPly = ply + 1; nextPly < pvLength[ply + 1];
+                 ++nextPly) {
+                // copy move from deeper ply
+                pvTable[ply][nextPly] = pvTable[ply + 1][nextPly];
             }
+            pvLength[ply] = pvLength[ply + 1];
         }
     }
     // we don't have any legal moves to make in the current postion
@@ -144,12 +145,6 @@ int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
         // return stalemate score
         return 0;
     }
-    // found better move
-    if (old_alpha != alpha) {
-        // init best move
-        bestMove = bestSofar;
-    }
-
     // node (move) fails low
     return alpha;
 }
@@ -200,10 +195,12 @@ int Evaluation::quiescence(int alpha, int beta) { // NOLINT
 
 void Evaluation::searchPosition(int depth) {
     int score = negamax(-50000, 50000, depth);
-    if (!bestMove.empty) {
-        printf("info score cp %d depth %d nodes %ld\n", score, depth, nodes);
-        std::cout << "bestmove " << bestMove.uciString() << std::endl;
+    std::cout << "info score cp " << score << " depth " << depth << " nodes "
+              << nodes << " pv ";
+    for (int i = 0; i < pvLength[0]; i++) {
+        std::cout << pvTable[0][i].uciString() << " ";
     }
+    std::cout << "\nbestmove " << pvTable[0][0].uciString() << std::endl;
 }
 
 int Evaluation::scoreMove(EncodedMove const &move) {

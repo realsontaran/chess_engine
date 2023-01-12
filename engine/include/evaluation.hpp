@@ -1,14 +1,16 @@
 #ifndef EVALUATION_H_
 #define EVALUATION_H_
-#include "attack_table.hpp"
-#include "encoding.hpp"
-#include "game_state.hpp"
-#include "make_move.hpp"
-#include "move_generation.hpp"
-#include "move_list.hpp"
+#include <attack_table.hpp>
+#include <encoding.hpp>
+#include <game_state.hpp>
+#include <make_move.hpp>
+#include <move_generation.hpp>
+#include <move_list.hpp>
 #include <types.hpp>
 #include <bits/stdc++.h>
 using namespace Types;
+
+#define PV_SIZE 64
 
 class Evaluation {
   public:
@@ -34,8 +36,6 @@ class Evaluation {
     long nodes = 0;
     int ply = 0;
 
-    EncodedMove bestMove;
-
     int const materialScore[12] = {
         100,   // white pawn score
         300,   // white knight scrore
@@ -44,8 +44,7 @@ class Evaluation {
         1000,  // white queen score
         10000, // white king score
         -100,  // black pawn score
-        -300,  // black knight scrore
-        -350,  // black bishop score
+        -300,  // black knight scrore -350,  // black bishop score
         -500,  // black rook score
         -1000, // black queen score
         -10000 // black king score
@@ -125,6 +124,28 @@ class Evaluation {
 
     EncodedMove killerMoves[2][64] = {{EncodedMove()}};
     int historyMoves[12][64] = {{0}};
+    /*
+            Triangular PV table
+      --------------------------------
+           0    1    2    3    4    5
+
+      0    m1   m2   m3   m4   m5   m6
+
+      1    0    m2   m3   m4   m5   m6
+
+      2    0    0    m3   m4   m5   m6
+
+      3    0    0    0    m4   m5   m6
+
+      4    0    0    0    0    m5   m6
+
+      5    0    0    0    0    0    m6
+    */
+    // PV length
+    int pvLength[PV_SIZE];
+
+    // PV table
+    EncodedMove pvTable[PV_SIZE][PV_SIZE] = {{EncodedMove()}};
 };
 
 #endif // EVALUATION_H_
