@@ -19,8 +19,8 @@ using namespace Bitboard;
 int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
-    std::string tricky_position = "r3k2r/p11pqpb1/bn2pnp1/2pPN3/1p2P3/2N2Q1p/"
-                                  "PPPBBPPP/R3K2R w KQkq c6 0 1 ";
+    std::string tricky_position =
+        "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 ";
     std::string cmk_position =
         "r2q1rk1/ppp2ppp/2n1bn2/2b1p3/3pP3/3P1NPP/PPP1NPB1/R1BQ1RK1 b - - 0 9 ";
     std::string killer_position =
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
         state.parseFEN(tricky_position);
         state.printBoard(true);
         Evaluation eval(state, attackTable);
-        eval.searchPosition(3);
+        eval.searchPosition(4);
     } else {
         UCI uci(attackTable, state);
         uci.uciLoop();

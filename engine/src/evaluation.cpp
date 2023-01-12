@@ -15,7 +15,6 @@ int Evaluation::evaluate() {
 
             // score material weights
             score += materialScore[piece];
-
             // score positional piece scores
             switch (piece) {
             // evaluate white pieces
@@ -27,6 +26,7 @@ int Evaluation::evaluate() {
                 break;
             case B:
                 score += bishop_score[square];
+
                 break;
             case R:
                 score += rook_score[square];
@@ -69,6 +69,11 @@ int Evaluation::negamax(int alpha, int beta, int depth) { // NOLINT
         // return quiescence
         return quiescence(alpha, beta);
     }
+
+    if (ply > MAX_PLY - 1) {
+        return evaluate();
+    }
+
     nodes++;
 
     unsigned int king_square = (state.sideToMove == white)
@@ -194,13 +199,30 @@ int Evaluation::quiescence(int alpha, int beta) { // NOLINT
 }
 
 void Evaluation::searchPosition(int depth) {
-    int score = negamax(-50000, 50000, depth);
+    int score = 0;
+    reset();
+
+    for (int current = 1; current <= depth; ++current) {
+        nodes = 0;
+        score = negamax(-50000, 50000, current);
+        std::cout << "info score cp " << score << " depth " << current
+                  << " nodes " << nodes << " pv ";
+        for (int i = 0; i < pvLength[0]; i++) {
+            std::cout << pvTable[0][i].uciString() << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << "bestmove " << pvTable[0][0].uciString() << std::endl;
+
+    reset();
+    score = negamax(-50000, 50000, depth);
     std::cout << "info score cp " << score << " depth " << depth << " nodes "
               << nodes << " pv ";
     for (int i = 0; i < pvLength[0]; i++) {
         std::cout << pvTable[0][i].uciString() << " ";
     }
-    std::cout << "\nbestmove " << pvTable[0][0].uciString() << std::endl;
+    std::cout << std::endl;
+    std::cout << "bestmove " << pvTable[0][0].uciString() << std::endl;
 }
 
 int Evaluation::scoreMove(EncodedMove const &move) {
@@ -262,4 +284,21 @@ int Evaluation::sortMoves(MoveList &moves) {
         }
     }
     return 0;
+}
+
+void Evaluation::reset() {
+    for (int i = 0; i < MAX_PLY; i++) {
+        for (int j = 0; j < MAX_PLY; j++) {
+            pvTable[i][j] = EncodedMove();
+        }
+    }
+
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < MAX_PLY; j++) {
+            killerMoves[i][j] = EncodedMove();
+        }
+    }
+    memset(pvLength, 0, sizeof(pvLength));
+    memset(historyMoves, 0, sizeof(historyMoves));
+    nodes = 0;
 }

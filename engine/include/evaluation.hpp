@@ -10,7 +10,7 @@
 #include <bits/stdc++.h>
 using namespace Types;
 
-#define PV_SIZE 64
+#define MAX_PLY 64
 
 class Evaluation {
   public:
@@ -31,6 +31,8 @@ class Evaluation {
     int sortMoves(MoveList &moves);
 
   private:
+    void reset();
+
     GameState state;
     AttackTable attackTable;
     long nodes = 0;
@@ -44,12 +46,12 @@ class Evaluation {
         1000,  // white queen score
         10000, // white king score
         -100,  // black pawn score
-        -300,  // black knight scrore -350,  // black bishop score
+        -300,  // black knight scrore
+        -350,  // black bishop score
         -500,  // black rook score
         -1000, // black queen score
         -10000 // black king score
     };
-    // pawn positional score
     int const pawn_score[64] = {
         90, 90, 90, 90,  90,  90, 90, 90, 30, 30, 30, 40, 40, 30, 30, 30,
         20, 20, 20, 30,  30,  30, 20, 20, 10, 10, 10, 20, 20, 10, 10, 10,
@@ -71,7 +73,6 @@ class Evaluation {
         0,  0,  0,  30, 0, 0, 0, -10, 0, 0,  -10, 0,  0
 
     };
-
     // rook positional score
     int const rook_score[64] = {
         50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 0,
@@ -122,7 +123,7 @@ class Evaluation {
         {101, 201, 301, 401, 501, 601, 101, 201, 301, 401, 501, 601},
         {100, 200, 300, 400, 500, 600, 100, 200, 300, 400, 500, 600}};
 
-    EncodedMove killerMoves[2][64] = {{EncodedMove()}};
+    EncodedMove killerMoves[2][MAX_PLY] = {{EncodedMove()}};
     int historyMoves[12][64] = {{0}};
     /*
             Triangular PV table
@@ -142,10 +143,10 @@ class Evaluation {
       5    0    0    0    0    0    m6
     */
     // PV length
-    int pvLength[PV_SIZE];
+    int pvLength[MAX_PLY];
 
     // PV table
-    EncodedMove pvTable[PV_SIZE][PV_SIZE] = {{EncodedMove()}};
+    EncodedMove pvTable[MAX_PLY][MAX_PLY] = {{EncodedMove()}};
 };
 
 #endif // EVALUATION_H_

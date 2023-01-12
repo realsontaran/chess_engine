@@ -63,7 +63,7 @@ void GameState::printBoard(bool unicode) {
                     break;
                 }
             }
-            printf(" %s ", pieceStr.c_str());
+            printf("%s ", pieceStr.c_str());
         }
         printf("\n");
     }
